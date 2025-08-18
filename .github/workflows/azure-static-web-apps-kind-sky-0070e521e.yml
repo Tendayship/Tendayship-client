@@ -1,4 +1,5 @@
 name: Azure Static Web Apps CI/CD
+
 on:
   push:
     branches:
@@ -18,35 +19,44 @@ jobs:
         with:
           submodules: true
           lfs: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      # Node.js 설정 및 pnpm 캐시 활성화
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
       - name: Lint
         run: pnpm run lint
+
       - name: Test (PR only)
         if: github.event_name == 'pull_request'
         run: pnpm run test
+
       - name: Build
         run: pnpm run build
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_KIND_SKY_0070E521E }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }} 
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: 'upload'
-          app_location: '/' # 또는 실제 소스 코드 경로
-          api_location: ''  # 별도 API 없을 때
-          output_location: 'dist' # 빌드 산출물이 생성되는 폴더명
-          skip_app_build: true    # 위에서 빌드하므로 true
+          app_location: '/'
+          api_location: ''
+          output_location: 'dist'
+          skip_app_build: true
+
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
