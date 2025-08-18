@@ -5,8 +5,8 @@ import type {
     HealthResponse,
 } from '../model/types';
 
-export function ping() {
-    return http.get<HealthResponse>('/ping');
+export function health() {
+    return http.get<HealthResponse>('/health');
 }
 
 export function echo(body: EchoRequest) {
