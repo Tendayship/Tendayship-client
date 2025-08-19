@@ -7,6 +7,14 @@ import ProgressIndicator from '../../widgets/ProgressIndicator';
 import { registerRecipient } from '../../api/familyApi.js'; // ◀️ API 함수 import
 import type { RecipientPayload } from '../../api/familyApi.js';
 
+interface DaumPostcodeData {
+    address: string;
+    addressType: string;
+    bname: string;
+    buildingName: string;
+    zonecode: string;
+}
+
 const AddressPage = () => {
     const navigate = useNavigate();
     const { groupId } = useParams<{ groupId: string }>(); // ◀️ URL에서 groupId 가져오기
@@ -27,7 +35,7 @@ const AddressPage = () => {
     };
 
     // ◀️ 우편번호 검색 완료 후 실행될 콜백 함수
-    const handleCompletePostcode = (data: any) => {
+    const handleCompletePostcode = (data: DaumPostcodeData) => {
         let fullAddress = data.address;
         let extraAddress = '';
 
