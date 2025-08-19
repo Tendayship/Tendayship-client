@@ -1,5 +1,3 @@
-import React from 'react';
-
 const PaymentHeader = () => {
     return (
         <header className="fixed top-0 left-0 h-[60px] w-[1920px] border-b [border-bottom-style:solid] border-[#c1c1c1] bg-[#ffffffcc] backdrop-blur-[2px] backdrop-brightness-[100%] [-webkit-backdrop-filter:blur(2px)_brightness(100%)]">

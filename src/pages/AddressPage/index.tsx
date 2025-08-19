@@ -1,5 +1,5 @@
 // src/pages/AddressPage/index.tsx (연결 및 개선 완료)
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import DaumPostcode from 'react-daum-postcode'; // ◀️ 우편번호 라이브러리 import
 import Header from '../../shared/ui/Header';

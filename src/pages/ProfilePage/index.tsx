@@ -1,11 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../shared/ui/Header';
-import {
-    registerProfile,
-    uploadProfileImage,
-    UserProfilePayload,
-} from '../../api/userApi';
+import { registerProfile, uploadProfileImage } from '../../api/userApi';
+import type { UserProfilePayload } from '../../api/userApi';
 
 const ProfilePage = () => {
     const navigate = useNavigate();

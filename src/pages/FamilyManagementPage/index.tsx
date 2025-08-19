@@ -1,5 +1,5 @@
 // src/pages/FamilyManagementPage/index.tsx (연결 및 개선 완료)
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../shared/ui/Header';
 import { joinGroupByCode } from '../../api/familyApi'; // ◀️ API 함수 import

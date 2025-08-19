@@ -1,5 +1,5 @@
 // src/pages/SubscriptionPage/index.tsx (연결 및 개선 완료)
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../shared/ui/Header';
 import { createSubscription } from '../../api/subscriptionApi'; // ◀️ API 함수 import

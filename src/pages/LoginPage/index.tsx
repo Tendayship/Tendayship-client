@@ -1,4 +1,3 @@
-import React from 'react';
 import Header from '../../shared/ui/Header';
 import KakaoLoginButton from '../../features/auth/KakaoLoginButton';
 

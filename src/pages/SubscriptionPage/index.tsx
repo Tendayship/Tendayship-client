@@ -1,8 +1,8 @@
 // src/pages/SubscriptionPage/index.tsx (연결 및 개선 완료)
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../shared/ui/Header';
-import { createSubscription } from '../../api/subscriptionApi'; // ◀️ API 함수 import
+import { createSubscription } from '../../api/familyApi'; // ◀️ API 함수 import
 
 const SubscriptionPage = () => {
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ const SubscriptionPage = () => {
         try {
             // ◀️ API 호출
             const subscription = await createSubscription(groupId, {
-                deliveryDay: selectedDate,
+                deliveryDate: selectedDate,
             });
             // const subscription = await undefined;
 
