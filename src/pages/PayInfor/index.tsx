@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import PaymentHeader from '../../shared/ui/PaymentHeader.js';
 
 const subscriptionInfo = {
     product: '구독상품',
@@ -56,7 +55,6 @@ const PaymentPage = () => {
 
     return (
         <div className="flex min-h-screen flex-col bg-[#f1f1f1]">
-            <PaymentHeader />
             <div className="flex flex-grow items-center justify-center bg-[#018941] pt-[60px]">
                 <h1 className="font-pretendard-semibold absolute top-[69px] left-[710px] text-[28px] tracking-[-0.7px] text-white">
                     가족의 사랑을 한 권의 책으로
