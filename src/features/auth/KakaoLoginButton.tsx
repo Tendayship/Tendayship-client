@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -19,6 +19,7 @@ const KakaoLoginButton = () => {
             console.error('카카오 로그인 URL 조회 실패', error);
             alert('카카오 로그인에 실패했습니다. 잠시 후 다시 시도해주세요.');
             setIsLoading(false);
+            navigate('/');
         }
     };
 
