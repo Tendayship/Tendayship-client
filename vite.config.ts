@@ -9,8 +9,13 @@ export default defineConfig({
             '/api': {
                 target: 'https://tendayapp-f0a0drg2b6avh8g3.koreacentral-01.azurewebsites.net/',
                 changeOrigin: true,
+<<<<<<< Updated upstream
                 rewrite: (path) =>
                     path.replace(/^\/api/, ''),
+=======
+                // --- 이 부분을 삭제했습니다 ---
+                // rewrite: (path) => path.replace(/^\/api/, ''), 
+>>>>>>> Stashed changes
             },
         },
     },
