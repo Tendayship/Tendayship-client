@@ -46,18 +46,8 @@ const FamilyManagementPage = () => {
 
             alert(`'${joinedGroup.groupName}' 그룹에 성공적으로 가입했습니다!`);
             navigate(`/family/${joinedGroup.groupId}`); // ◀️ 성공 시 가입한 그룹 페이지로 이동
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('그룹 가입 실패:', error);
-            // 서버에서 구체적인 에러 메시지를 보냈을 경우
-            if (
-                error.response &&
-                error.response.data &&
-                error.response.data.message
-            ) {
-                alert(error.response.data.message);
-            } else {
-                alert('유효하지 않은 코드이거나 오류가 발생했습니다.');
-            }
         } finally {
             setIsLoading(false);
         }
