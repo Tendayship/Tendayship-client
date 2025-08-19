@@ -1,7 +1,6 @@
 // src/pages/SubscriptionPage/index.tsx (연결 및 개선 완료)
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Header from '../../shared/ui/Header';
 import { createSubscription } from '../../api/familyApi'; // ◀️ API 함수 import
 
 const SubscriptionPage = () => {
@@ -46,58 +45,53 @@ const SubscriptionPage = () => {
     };
 
     return (
-        <div className="flex min-h-screen flex-col bg-[#F1F1F1]">
-            <Header />
-            <main className="flex flex-grow items-center justify-center p-4">
-                <div className="h-auto w-[500px] border border-[#C2C2C2] bg-[#FFF] p-[50px] text-center">
-                    <h1 className="mt-[-10px] mb-[20px] text-[32px] font-bold text-[#000]">
-                        소식 책자 정기 구독
-                    </h1>
-                    <p className="mb-4 text-[18px] text-[#6A6A6A]">
-                        월 6,900원으로 가족의 이야기를 책으로 받아보세요.
-                    </p>
-                    <p className="mb-8 text-lg font-semibold">수령일 선택</p>
+        <main className="flex min-h-screen items-center justify-center bg-[#F1F1F1] p-4">
+            <div className="h-auto w-[500px] border border-[#C2C2C2] bg-[#FFF] p-[50px] text-center">
+                <h1 className="mt-[-10px] mb-[20px] text-[32px] font-bold text-[#000]">
+                    소식 책자 정기 구독
+                </h1>
+                <p className="mb-4 text-[18px] text-[#6A6A6A]">
+                    월 6,900원으로 가족의 이야기를 책으로 받아보세요.
+                </p>
+                <p className="mb-8 text-lg font-semibold">수령일 선택</p>
 
-                    <div className="mb-[74px] flex justify-center space-x-4">
-                        {/* ◀️ onClick 핸들러에서 API에 보낼 값을 직접 설정 */}
-                        <button
-                            className={`h-[48px] w-[180px] rounded-[5px] text-lg font-semibold transition-colors ${
-                                selectedDate === 'SECOND_SUNDAY'
-                                    ? 'bg-[#018941] text-white'
-                                    : 'bg-[#F1F1F1] text-gray-700 hover:bg-gray-300'
-                            }`}
-                            onClick={() => setSelectedDate('SECOND_SUNDAY')}
-                            disabled={isSubscribing}
-                        >
-                            매월 둘째 주
-                        </button>
-                        <button
-                            className={`h-[48px] w-[180px] rounded-[5px] text-lg font-semibold transition-colors ${
-                                selectedDate === 'FOURTH_SUNDAY'
-                                    ? 'bg-[#018941] text-white'
-                                    : 'bg-[#F1F1F1] text-gray-700 hover:bg-gray-300'
-                            }`}
-                            onClick={() => setSelectedDate('FOURTH_SUNDAY')}
-                            disabled={isSubscribing}
-                        >
-                            매월 넷째 주
-                        </button>
-                    </div>
-
+                <div className="mb-[74px] flex justify-center space-x-4">
+                    {/* ◀️ onClick 핸들러에서 API에 보낼 값을 직접 설정 */}
                     <button
-                        className="h-[48px] w-[350px] rounded-[5px] bg-green-600 text-white transition-colors hover:bg-green-700 disabled:bg-gray-400"
-                        onClick={handleSubscription}
+                        className={`h-[48px] w-[180px] rounded-[5px] text-lg font-semibold transition-colors ${
+                            selectedDate === 'SECOND_SUNDAY'
+                                ? 'bg-[#018941] text-white'
+                                : 'bg-[#F1F1F1] text-gray-700 hover:bg-gray-300'
+                        }`}
+                        onClick={() => setSelectedDate('SECOND_SUNDAY')}
                         disabled={isSubscribing}
                     >
-                        <span className="text-[20px] font-semibold">
-                            {isSubscribing
-                                ? '처리 중...'
-                                : '정기 구독 시작하기'}
-                        </span>
+                        매월 둘째 주
+                    </button>
+                    <button
+                        className={`h-[48px] w-[180px] rounded-[5px] text-lg font-semibold transition-colors ${
+                            selectedDate === 'FOURTH_SUNDAY'
+                                ? 'bg-[#018941] text-white'
+                                : 'bg-[#F1F1F1] text-gray-700 hover:bg-gray-300'
+                        }`}
+                        onClick={() => setSelectedDate('FOURTH_SUNDAY')}
+                        disabled={isSubscribing}
+                    >
+                        매월 넷째 주
                     </button>
                 </div>
-            </main>
-        </div>
+
+                <button
+                    className="h-[48px] w-[350px] rounded-[5px] bg-green-600 text-white transition-colors hover:bg-green-700 disabled:bg-gray-400"
+                    onClick={handleSubscription}
+                    disabled={isSubscribing}
+                >
+                    <span className="text-[20px] font-semibold">
+                        {isSubscribing ? '처리 중...' : '정기 구독 시작하기'}
+                    </span>
+                </button>
+            </div>
+        </main>
     );
 };
 
