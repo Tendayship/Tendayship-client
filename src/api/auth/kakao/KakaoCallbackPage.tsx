@@ -15,26 +15,67 @@ const KakaoCallbackPage = () => {
 
             console.log('카카오 콜백 파라미터:', { token, user_id });
 
+            // 팝업 모드인지 확인 (window.opener가 존재하면 팝업)
+            const isPopup = window.opener && !window.opener.closed;
+
             if (!token) {
                 console.error('토큰이 없습니다.');
-                navigate('/login');
+
+                if (isPopup) {
+                    // 팝업 모드에서는 부모창으로 에러 메시지 전송
+                    window.opener.postMessage(
+                        {
+                            type: 'KAKAO_LOGIN_ERROR',
+                            error: '토큰을 받아오지 못했습니다.',
+                        },
+                        window.location.origin
+                    );
+                    window.close();
+                } else {
+                    navigate('/login');
+                }
                 return;
             }
 
             try {
-                // AuthContext의 login 메서드 사용
-                login(token);
-
-                // user_id가 "None"이면 신규 사용자로 판단하여 프로필 페이지로
-                if (user_id === 'None' || user_id === null) {
-                    navigate('/profile');
+                if (isPopup) {
+                    // 팝업 모드에서는 부모창으로 성공 메시지 전송
+                    window.opener.postMessage(
+                        {
+                            type: 'KAKAO_LOGIN_SUCCESS',
+                            token,
+                            user_id,
+                        },
+                        window.location.origin
+                    );
+                    window.close();
                 } else {
-                    // 기존 사용자는 메인 페이지로
-                    navigate('/');
+                    // 기존 방식: 현재 창에서 직접 로그인 처리
+                    login(token);
+
+                    // user_id가 "None"이면 신규 사용자로 판단하여 프로필 페이지로
+                    if (user_id === 'None' || user_id === null) {
+                        navigate('/profile');
+                    } else {
+                        // 기존 사용자는 메인 페이지로
+                        navigate('/');
+                    }
                 }
             } catch (err) {
                 console.error('로그인 처리 실패:', err);
-                navigate('/login');
+
+                if (isPopup) {
+                    window.opener.postMessage(
+                        {
+                            type: 'KAKAO_LOGIN_ERROR',
+                            error: '로그인 처리에 실패했습니다.',
+                        },
+                        window.location.origin
+                    );
+                    window.close();
+                } else {
+                    navigate('/login');
+                }
             }
         };
 
