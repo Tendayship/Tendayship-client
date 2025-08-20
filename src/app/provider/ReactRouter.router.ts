@@ -20,9 +20,18 @@ import PaymentPage from '../../pages/PayInfor';
 import KakaoCallbackPage from '../../api/auth/kakao/KakaoCallbackPage';
 
 const router = createBrowserRouter([
-    // 카카오 콜백은 Layout 밖에서 처리
+    // 카카오 콜백은 Layout 밖에서 처리 (기존 경로 유지)
     {
         path: '/kakao/callback',
+        element: React.createElement(KakaoCallbackPage),
+    },
+    // 백엔드 리다이렉트 경로 추가
+    {
+        path: '/auth/callback/success',
+        element: React.createElement(KakaoCallbackPage),
+    },
+    {
+        path: '/auth/callback/fail',
         element: React.createElement(KakaoCallbackPage),
     },
     // 로그인 페이지도 Layout 밖에서 처리

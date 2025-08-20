@@ -52,17 +52,25 @@ export default function KakaoLoginButton() {
                     }
 
                     if (event.data.type === 'KAKAO_LOGIN_SUCCESS') {
-                        const { token, user_id } = event.data;
+                        try {
+                            // 쿠키 기반 인증이므로 서버 상태 동기화
+                            await login();
 
-                        // AuthContext의 login 메서드 사용
-                        login(token);
+                            // 사용자 정보 확인하여 라우팅
+                            const userRes = await axios.get('/api/auth/me', {
+                                withCredentials: true,
+                            });
 
-                        // user_id가 "None"이면 신규 사용자로 판단하여 프로필 페이지로
-                        if (user_id === 'None' || user_id === null) {
-                            window.location.href = '/profile';
-                        } else {
-                            // 기존 사용자는 메인 페이지로
-                            window.location.href = '/';
+                            // 신규 사용자 판단 로직 (필요시 수정)
+                            const isNewUser = !userRes.data.name || !userRes.data.phone;
+                            if (isNewUser) {
+                                window.location.href = '/profile';
+                            } else {
+                                window.location.href = '/';
+                            }
+                        } catch (err) {
+                            console.error('로그인 후 처리 실패:', err);
+                            setError('로그인 처리에 실패했습니다.');
                         }
 
                         popup.close();

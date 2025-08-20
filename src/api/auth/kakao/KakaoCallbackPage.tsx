@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../contexts';
+import axios from 'axios';
 
 const KakaoCallbackPage = () => {
     const navigate = useNavigate();
@@ -9,24 +10,22 @@ const KakaoCallbackPage = () => {
 
     useEffect(() => {
         const handleKakaoCallback = async () => {
+            // URL에서 실패 상태 확인
             const params = new URLSearchParams(location.search);
-            const token = params.get('token');
-            const user_id = params.get('user_id');
-
-            console.log('카카오 콜백 파라미터:', { token, user_id });
-
+            const reason = params.get('reason');
+            
             // 팝업 모드인지 확인 (window.opener가 존재하면 팝업)
             const isPopup = window.opener && !window.opener.closed;
 
-            if (!token) {
-                console.error('토큰이 없습니다.');
+            // 실패 콜백 경로인지 확인
+            if (location.pathname === '/auth/callback/fail') {
+                console.error('카카오 로그인 실패:', reason);
 
                 if (isPopup) {
-                    // 팝업 모드에서는 부모창으로 에러 메시지 전송
                     window.opener.postMessage(
                         {
                             type: 'KAKAO_LOGIN_ERROR',
-                            error: '토큰을 받아오지 못했습니다.',
+                            error: reason || '카카오 로그인에 실패했습니다.',
                         },
                         window.location.origin
                     );
@@ -38,26 +37,39 @@ const KakaoCallbackPage = () => {
             }
 
             try {
+                // 쿠키 기반 인증 상태 확인
+                const res = await axios.get('/api/auth/verify', { 
+                    withCredentials: true 
+                });
+                
+                if (!res.ok && res.status !== 200) {
+                    throw new Error('verify_failed');
+                }
+
+                // 사용자 정보 가져오기
+                const userRes = await axios.get('/api/auth/me', { 
+                    withCredentials: true 
+                });
+
                 if (isPopup) {
                     // 팝업 모드에서는 부모창으로 성공 메시지 전송
                     window.opener.postMessage(
                         {
                             type: 'KAKAO_LOGIN_SUCCESS',
-                            token,
-                            user_id,
+                            user: userRes.data,
                         },
                         window.location.origin
                     );
                     window.close();
                 } else {
-                    // 기존 방식: 현재 창에서 직접 로그인 처리
-                    login(token);
+                    // 현재 창에서 직접 로그인 처리
+                    await login();
 
-                    // user_id가 "None"이면 신규 사용자로 판단하여 프로필 페이지로
-                    if (user_id === 'None' || user_id === null) {
+                    // 신규 사용자 판단 로직 (필요시 서버 응답에 따라 수정)
+                    const isNewUser = !userRes.data.name || !userRes.data.phone;
+                    if (isNewUser) {
                         navigate('/profile');
                     } else {
-                        // 기존 사용자는 메인 페이지로
                         navigate('/');
                     }
                 }
