@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../../shared/ui/Header';
 import { registerProfile, uploadProfileImage } from '../../api/userApi';
 import type { UserProfilePayload } from '../../api/userApi';
-
 import defaultProfileIcon from '../../assets/Iconwhite.svg';
 
 const ProfilePage = () => {
@@ -33,7 +32,6 @@ const ProfilePage = () => {
     });
 
     const [isLoading, setIsLoading] = useState(false);
-
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
         setUserProfile((prevProfile) => ({ ...prevProfile, [id]: value }));
@@ -94,7 +92,6 @@ const ProfilePage = () => {
             setIsLoading(false);
         }
     };
-
     return (
         <div className="flex min-h-screen flex-col bg-[#F1F1F1]">
             <Header />
@@ -155,7 +152,6 @@ const ProfilePage = () => {
                                 type="text"
                                 id="name"
                                 placeholder="이름을 입력하세요"
-
                                 className="h-[48px] w-full rounded-[5px] bg-[#F1F1F1] p-[16px] text-[16px] focus:border-[#018941] focus:outline-none focus:ring-0"
                                 value={userProfile.name}
                                 onChange={handleInputChange}
@@ -182,7 +178,6 @@ const ProfilePage = () => {
                                 type="text"
                                 id="dob"
                                 placeholder="6자리 (ex. 990102)"
-
                                 className="h-[48px] w-full rounded-[5px] bg-[#F1F1F1] p-[16px] text-[16px] focus:border-[#018941] focus:outline-none focus:ring-0"
                                 value={userProfile.dob}
                                 onChange={handleInputChange}
@@ -210,7 +205,6 @@ const ProfilePage = () => {
                                 type="text"
                                 id="phone"
                                 placeholder="전화번호를 입력하세요"
-
                                 className="h-[48px] w-full rounded-[5px] bg-[#F1F1F1] p-[16px] text-[16px] focus:border-[#018941] focus:outline-none focus:ring-0"
                                 value={userProfile.phone}
                                 onChange={handleInputChange}
@@ -228,7 +222,6 @@ const ProfilePage = () => {
                         <button
                             type="submit"
                             id="next-button"
-
                             className="h-[48px] w-[400px] rounded-[5px] bg-[#018941] text-[#FFF] transition-colors hover:bg-[#018941]/90 focus:outline-none focus:ring-0 disabled:bg-gray-400"
                             disabled={isLoading}
                         >

@@ -11,18 +11,9 @@ export class HttpError extends Error {
     }
 }
 
-type Json =
-    | string
-    | number
-    | boolean
-    | null
-    | { [key: string]: Json }
-    | Json[];
+type Json = string | number | boolean | null | { [key: string]: Json } | Json[];
 
-async function request<T>(
-    path: string,
-    init: RequestInit = {}
-): Promise<T> {
+async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
     const url = joinUrl(API_BASE, path);
     const headers = new Headers(init.headers);
 
@@ -51,32 +42,18 @@ export const http = {
     get<T>(path: string, init?: RequestInit) {
         return request<T>(path, { ...init, method: 'GET' });
     },
-    post<T, B extends Json = Json>(
-        path: string,
-        body?: B,
-        init?: RequestInit
-    ) {
+    post<T, B extends Json = Json>(path: string, body?: B, init?: RequestInit) {
         return request<T>(path, {
             ...init,
             method: 'POST',
-            body:
-                body != null
-                    ? JSON.stringify(body)
-                    : undefined,
+            body: body != null ? JSON.stringify(body) : undefined,
         });
     },
-    put<T, B extends Json = Json>(
-        path: string,
-        body?: B,
-        init?: RequestInit
-    ) {
+    put<T, B extends Json = Json>(path: string, body?: B, init?: RequestInit) {
         return request<T>(path, {
             ...init,
             method: 'PUT',
-            body:
-                body != null
-                    ? JSON.stringify(body)
-                    : undefined,
+            body: body != null ? JSON.stringify(body) : undefined,
         });
     },
     patch<T, B extends Json = Json>(
@@ -87,10 +64,7 @@ export const http = {
         return request<T>(path, {
             ...init,
             method: 'PATCH',
-            body:
-                body != null
-                    ? JSON.stringify(body)
-                    : undefined,
+            body: body != null ? JSON.stringify(body) : undefined,
         });
     },
     delete<T>(path: string, init?: RequestInit) {

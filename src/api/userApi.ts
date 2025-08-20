@@ -6,9 +6,9 @@ const API_BASE_URL = '/api';
  */
 export type UserProfilePayload = {
     name: string;
-    dob: string; // "990102"
+    dob: string; // Expected as 6 digits (e.g., "990102") from the form
     phone: string;
-    profileImageUrl?: string;
+    profileImageUrl?: string; // Optional image URL
 };
 
 /**
@@ -39,7 +39,6 @@ export async function uploadProfileImage(
     if (!response.ok) {
         throw new Error('Failed to upload profile image.');
     }
-
     return response.json();
 }
 
