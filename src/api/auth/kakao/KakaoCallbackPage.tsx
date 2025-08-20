@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../contexts';
-import axios from 'axios';
+import axiosInstance from '../../../shared/api/axiosInstance';
 
 const KakaoCallbackPage = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const KakaoCallbackPage = () => {
       
       // 팝업 모드인지 확인
       const isPopup = window.opener && !window.opener.closed;
-      
+
       // 실패 콜백 경로인지 확인
       if (location.pathname === '/auth/callback/fail') {
         console.error('카카오 로그인 실패:', reason);
@@ -28,7 +28,8 @@ const KakaoCallbackPage = () => {
             },
             window.location.origin
           );
-          window.close();
+          // 팝업 닫기에 짧은 지연 추가
+          setTimeout(() => window.close(), 50);
         } else {
           navigate('/login');
         }
@@ -36,20 +37,14 @@ const KakaoCallbackPage = () => {
       }
 
       try {
-        // 쿠키 기반 인증 상태 확인
-        const res = await axios.get('/api/auth/verify', {
-          withCredentials: true
-        });
-        
-        // ✅ axios는 status로 확인
+        // 쿠키 기반 인증 상태 확인 - axiosInstance 사용
+        const res = await axiosInstance.get('/api/auth/verify');
         if (res.status !== 200) {
           throw new Error('verify_failed');
         }
 
-        // 사용자 정보 가져오기
-        const userRes = await axios.get('/api/auth/me', {
-          withCredentials: true
-        });
+        // 사용자 정보 가져오기 - axiosInstance 사용
+        const userRes = await axiosInstance.get('/api/auth/me');
 
         if (isPopup) {
           // 팝업 모드에서는 부모창으로 성공 메시지 전송
@@ -60,7 +55,8 @@ const KakaoCallbackPage = () => {
             },
             window.location.origin
           );
-          window.close();
+          // 팝업 닫기에 짧은 지연 추가
+          setTimeout(() => window.close(), 50);
         } else {
           // 현재 창에서 직접 로그인 처리
           await login();
@@ -83,7 +79,7 @@ const KakaoCallbackPage = () => {
             },
             window.location.origin
           );
-          window.close();
+          setTimeout(() => window.close(), 50);
         } else {
           navigate('/login');
         }
@@ -94,7 +90,7 @@ const KakaoCallbackPage = () => {
   }, [location, navigate, login]);
 
   return (
-    <div>
+    <div className="flex items-center justify-center min-h-screen">
       로그인 처리 중...
     </div>
   );

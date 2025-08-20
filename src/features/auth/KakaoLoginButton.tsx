@@ -1,6 +1,6 @@
 // KakaoLoginButton.tsx
 import { useCallback, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../shared/api/axiosInstance';
 import { useAuth } from '../../contexts';
 import kakaoLogo from '../../assets/kakao_talk.png';
 
@@ -16,16 +16,13 @@ export default function KakaoLoginButton() {
 
   const handleLogin = useCallback(async () => {
     if (isLoading) return;
-    
     setIsLoading(true);
     setError(null);
 
     try {
-      const { data } = await axios.get<KakaoUrlResponse>(
-        '/api/auth/kakao/url',
-        { withCredentials: true }
-      );
-
+      // axiosInstance 사용 - withCredentials 자동 적용
+      const { data } = await axiosInstance.get<KakaoUrlResponse>('/api/auth/kakao/url');
+      
       const loginUrl = data?.login_url ?? data?.loginUrl;
       if (!loginUrl) throw new Error('로그인 URL을 받아오지 못했습니다.');
 
@@ -43,7 +40,7 @@ export default function KakaoLoginButton() {
           );
         }
 
-        // ✅ 메시지 리스너를 async 함수로 선언
+        // 메시지 리스너를 async 함수로 선언
         const handleMessage = async (event: MessageEvent) => {
           // 보안을 위해 origin 체크
           if (event.origin !== window.location.origin) {
@@ -52,21 +49,22 @@ export default function KakaoLoginButton() {
 
           if (event.data.type === 'KAKAO_LOGIN_SUCCESS') {
             try {
-              // 쿠키 기반 인증이므로 서버 상태 동기화
-              await login();
-              
-              // 사용자 정보 확인하여 라우팅
-              const userRes = await axios.get('/api/auth/me', {
-                withCredentials: true,
-              });
-
-              // 신규 사용자 판단 로직
-              const isNewUser = !userRes.data.name || !userRes.data.phone;
-              if (isNewUser) {
-                window.location.href = '/profile';
-              } else {
-                window.location.href = '/';
-              }
+              // 타이밍 이슈 완화를 위한 짧은 지연 추가
+              setTimeout(async () => {
+                // 쿠키 기반 인증이므로 서버 상태 동기화
+                await login();
+                
+                // 사용자 정보 확인하여 라우팅 - axiosInstance 사용
+                const userRes = await axiosInstance.get('/api/auth/me');
+                
+                // 신규 사용자 판단 로직
+                const isNewUser = !userRes.data.name || !userRes.data.phone;
+                if (isNewUser) {
+                  window.location.href = '/profile';
+                } else {
+                  window.location.href = '/';
+                }
+              }, 150); // 150ms 지연으로 쿠키 전파 타이밍 이슈 완화
             } catch (err) {
               console.error('로그인 후 처리 실패:', err);
               setError('로그인 처리에 실패했습니다.');
@@ -97,7 +95,6 @@ export default function KakaoLoginButton() {
     } catch (err: unknown) {
       console.error('카카오 로그인 URL 조회 실패', err);
       let msg = '로그인에 실패했습니다. 잠시 후 다시 시도해주세요.';
-      
       if (err && typeof err === 'object' && 'response' in err) {
         const axiosError = err as {
           response?: { data?: { message?: string } };
@@ -106,7 +103,6 @@ export default function KakaoLoginButton() {
       } else if (err instanceof Error) {
         msg = err.message;
       }
-
       setError(msg);
       setIsLoading(false);
     }
@@ -114,8 +110,7 @@ export default function KakaoLoginButton() {
 
   return (
     <div>
-      <button
-        type="button"
+      <button 
         className={BUTTON_BASE}
         onClick={handleLogin}
         disabled={isLoading}
@@ -124,12 +119,12 @@ export default function KakaoLoginButton() {
           '로그인 중...'
         ) : (
           <>
-            <img src={kakaoLogo} alt="카카오" className="mr-2 h-6 w-6" />
+            <img src={kakaoLogo} alt="카카오" className="w-5 h-5 mr-2" />
             카카오로 로그인 하기
           </>
         )}
       </button>
-      {error && <div className="text-red-500">{error}</div>}
+      {error && <p className="text-red-500 mt-2">{error}</p>}
     </div>
   );
 }
