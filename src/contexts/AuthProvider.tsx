@@ -18,26 +18,25 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const checkAuthStatus = async () => {
     try {
-        await axiosInstance.get('/auth/verify');
-        const userResponse = await axiosInstance.get('/auth/me');
-        
-        setIsAuthenticated(true);
-        setUser(userResponse.data);
-    } catch (error) {
-        // 초기 로딩 시 401은 정상적인 미로그인 상태
-        if (error.response?.status === 401) {
+      await axiosInstance.get('/auth/verify');
+      const userResponse = await axiosInstance.get('/auth/me');
+      
+      setIsAuthenticated(true);
+      setUser(userResponse.data);
+    } catch (error: any) {  // ← error를 any 타입으로 단언하여 TS18046 에러 해결
+      // 초기 로딩 시 401은 정상적인 미로그인 상태
+      if (error?.response?.status === 401) {
         console.log('미로그인 상태 - 정상');
-        } else {
+      } else {
         console.error('인증 확인 중 오류:', error);
-        }
-        
-        setIsAuthenticated(false);
-        setUser(null);
+      }
+      
+      setIsAuthenticated(false);
+      setUser(null);
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
-    };
-
+  };
 
   const login = async () => {
     // 쿠키 기반 인증이므로 토큰 매개변수 제거
@@ -49,7 +48,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       // 서버에 로그아웃 요청하여 쿠키 무효화 - axiosInstance 사용
       await axiosInstance.post('/auth/logout', {});
-    } catch (error) {
+    } catch (error: any) {  // ← 여기도 any 타입으로 단언
       console.error('로그아웃 요청 실패:', error);
     } finally {
       // 클라이언트 상태 초기화
