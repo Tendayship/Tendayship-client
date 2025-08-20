@@ -1,11 +1,10 @@
 import React from 'react';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 // 레이아웃 import
 import Layout from '../../shared/ui/Layout';
 
 // 페이지 imports
-import MainPage from '../../pages/main/main-page';
 import ApiTestPage from '../../pages/test/api-test-page';
 import LoginPage from '../../pages/LoginPage';
 import ProfilePage from '../../pages/ProfilePage';
@@ -16,15 +15,24 @@ import FamilyManagementPage from '../../pages/FamilyManagementPage';
 import AddressPage from '../../pages/AddressPage';
 import SubscriptionPage from '../../pages/SubscriptionPage';
 import PaymentPage from '../../pages/PayInfor';
+import KakaoCallbackPage from '../../api/auth/kakao/KakaoCallbackPage';
 
 const router = createBrowserRouter([
+    // 카카오 콜백은 Layout 밖에서 처리
+    {
+        path: '/kakao/callback',
+        element: React.createElement(KakaoCallbackPage),
+    },
     {
         path: '/',
         element: React.createElement(Layout),
         children: [
             {
                 index: true,
-                element: React.createElement(MainPage),
+                element: React.createElement(Navigate, {
+                    to: '/login',
+                    replace: true,
+                }),
             },
             {
                 path: 'login',
