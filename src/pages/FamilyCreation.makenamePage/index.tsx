@@ -1,13 +1,22 @@
+<<<<<<< Updated upstream:src/pages/FamilyCreationPage/index.tsx
 // src/pages/FamilyCreationPage/index.tsx (연결 및 개선 완료)
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // ◀️ 페이지 이동 hook
 import { createFamilyGroup } from '../../api/familyApi'; // ◀️ 우리가 만든 API 함수
+=======
+// 파일명: src/pages/FamilyCreationPage/FamilyCreationNamePage.tsx
+>>>>>>> Stashed changes:src/pages/FamilyCreation.makenamePage/index.tsx
 
-const FamilyCreationPage = () => {
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Header from '../../shared/ui/Header';
+import { createFamilyGroup } from '../../api/familyApi';
+
+const FamilyCreationNamePage = () => {
     const navigate = useNavigate();
     const [groupName, setGroupName] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(false); // ◀️ 로딩 상태 추가
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setGroupName(e.target.value);
@@ -16,7 +25,6 @@ const FamilyCreationPage = () => {
         }
     };
 
-    // '등록' 버튼 클릭 시 실행될 함수
     const handleRegister = async () => {
         if (!groupName.trim()) {
             setError(true);
@@ -26,13 +34,9 @@ const FamilyCreationPage = () => {
         setIsLoading(true);
 
         try {
-            // ◀️ API 호출: groupName을 payload에 담아 전송
             const newGroup = await createFamilyGroup({ name: groupName });
-
             alert(`"${newGroup.name}" 가족 그룹이 성공적으로 생성되었습니다!`);
-
-            // ◀️ 성공 시, 생성된 그룹의 상세 페이지로 이동 (ID 활용)
-            navigate(`/family/${newGroup.id}`);
+            navigate(`/family/create-address/${newGroup.id}`);
         } catch (err) {
             console.error('가족 그룹 생성 실패:', err);
             alert('그룹 생성 중 오류가 발생했습니다.');
@@ -90,4 +94,4 @@ const FamilyCreationPage = () => {
     );
 };
 
-export default FamilyCreationPage;
+export default FamilyCreationNamePage;

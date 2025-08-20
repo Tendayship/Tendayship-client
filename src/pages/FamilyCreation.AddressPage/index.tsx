@@ -1,0 +1,164 @@
+// 파일명: src/pages/AddressPage/index.tsx
+
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import DaumPostcode from 'react-daum-postcode';
+import Header from '../../shared/ui/Header.js';
+import ProgressIndicator from '../../widgets/ProgressIndicator/index.js';
+import { registerRecipient } from '../../api/familyApi.js';
+import type { RecipientPayload } from '../../api/familyApi.js';
+
+interface DaumPostcodeData {
+    address: string;
+    addressType: string;
+    bname: string;
+    buildingName: string;
+    zonecode: string;
+}
+
+const AddressPage = () => {
+    const navigate = useNavigate();
+    const { groupId } = useParams<{ groupId: string }>();
+
+    const [addressInfo, setAddressInfo] = useState<RecipientPayload>({
+        name: '',
+        postcode: '',
+        detailAddress: '',
+        phoneNumber: '',
+    });
+
+    const [isPostcodeModalOpen, setIsPostcodeModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;
+        setAddressInfo((prev) => ({ ...prev, [id]: value }));
+    };
+
+    const handleCompletePostcode = (data: DaumPostcodeData) => {
+        let fullAddress = data.address;
+        let extraAddress = '';
+
+        if (data.addressType === 'R') {
+            if (data.bname !== '') {
+                extraAddress += data.bname;
+            }
+            if (data.buildingName !== '') {
+                extraAddress +=
+                    extraAddress !== ''
+                        ? `, ${data.buildingName}`
+                        : data.buildingName;
+            }
+            fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
+        }
+
+        setAddressInfo((prev) => ({
+            ...prev,
+            postcode: data.zonecode,
+            detailAddress: fullAddress,
+        }));
+
+        setIsPostcodeModalOpen(false);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!groupId) {
+            alert('잘못된 접근입니다. 그룹 ID가 없습니다.');
+            return;
+        }
+
+        if (
+            Object.values(addressInfo).some(
+                (value) => !(value as string).trim()
+            )
+        ) {
+            alert('모든 정보를 입력해주세요.');
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            await registerRecipient(groupId, addressInfo);
+            alert('주소 정보가 성공적으로 등록되었습니다!');
+            navigate(`/family/create-complete/${groupId}`);
+        } catch (error) {
+            console.error('주소 등록 실패:', error);
+            alert('주소 등록 중 오류가 발생했습니다.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const stepData = [
+        { number: 1, isCompleted: true },
+        { number: 2, isActive: true },
+        { number: 3, isCompleted: false },
+    ];
+
+    return (
+        <>
+            <div className="flex min-h-screen flex-col bg-gray-100">
+                <Header />
+                <div className="mt-20 flex flex-col items-center">
+                    <ProgressIndicator stepData={stepData} />
+                    <main className="mt-10 w-[500px] rounded-lg bg-white p-10 text-center shadow-lg">
+                        <h1 className="mb-2 text-3xl font-bold">주소</h1>
+                        <p className="mb-8 text-gray-600">
+                            배송 받으실 주소를 입력해 주세요
+                        </p>
+
+                        <form
+                            onSubmit={handleSubmit}
+                            className="flex flex-col items-start space-y-4"
+                        >
+                            {/* 받는 사람 */}
+                            <div className="w-full text-left">
+                                <label htmlFor="name" className="mb-1 block text-sm font-medium text-gray-700">받는 분</label>
+                                <input id="name" type="text" value={addressInfo.name} onChange={handleInputChange} className="h-12 w-full rounded-md border border-gray-300 px-4" placeholder="받는 분 성함을 입력하세요" />
+                            </div>
+
+                            {/* 우편 번호 */}
+                            <div className="w-full text-left">
+                                <label htmlFor="postcode" className="mb-1 block text-sm font-medium text-gray-700">우편 번호</label>
+                                <div className="flex space-x-2">
+                                    <input type="text" id="postcode" value={addressInfo.postcode} className="h-12 flex-1 rounded-md border border-gray-300 px-4" placeholder="우편 번호" readOnly />
+                                    <button type="button" onClick={() => setIsPostcodeModalOpen(true)} className="h-12 rounded-md bg-[#709ECD] px-4 text-white hover:bg-[#5a8ac4]">우편 번호 찾기</button>
+                                </div>
+                            </div>
+
+                            {/* 상세 주소 */}
+                            <div className="w-full text-left">
+                                <label htmlFor="detailAddress" className="mb-1 block text-sm font-medium text-gray-700">주소</label>
+                                <input id="detailAddress" type="text" value={addressInfo.detailAddress} onChange={handleInputChange} className="h-12 w-full rounded-md border border-gray-300 px-4" placeholder="상세 주소를 입력하세요" />
+                            </div>
+
+                            {/* 전화번호 */}
+                            <div className="w-full text-left">
+                                <label htmlFor="phoneNumber" className="mb-1 block text-sm font-medium text-gray-700">연락처</label>
+                                <input id="phoneNumber" type="text" value={addressInfo.phoneNumber} onChange={handleInputChange} className="h-12 w-full rounded-md border border-gray-300 px-4" placeholder="'-' 없이 숫자만 입력" />
+                            </div>
+
+                            <button type="submit" className="mt-6 h-12 w-full rounded-lg bg-green-600 font-semibold text-white transition-colors hover:bg-green-700 disabled:bg-gray-400" disabled={isLoading}>
+                                {isLoading ? '등록 중...' : '등록'}
+                            </button>
+                        </form>
+                    </main>
+                </div>
+            </div>
+
+            {isPostcodeModalOpen && (
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 100 }}>
+                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white', padding: '20px' }}>
+                        <DaumPostcode onComplete={handleCompletePostcode} />
+                        <button onClick={() => setIsPostcodeModalOpen(false)} style={{ marginTop: '10px', width: '100%', padding: '10px' }}>
+                            닫기
+                        </button>
+                    </div>
+                </div>
+            )}
+        </>
+    );
+};
+
+export default AddressPage;

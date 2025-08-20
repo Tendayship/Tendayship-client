@@ -1,18 +1,30 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< Updated upstream
 import { registerProfile, uploadProfileImage } from '../../api/userApi';
 import type { UserProfilePayload } from '../../api/userApi';
+=======
+import Header from '../../shared/ui/Header';
+import { updateProfile, uploadProfileImage } from '../../api/userApi';
+
+// UserProfilePayload 타입 정의가 파일에 없어서 추가했습니다.
+// 실제 프로젝트의 타입 정의에 맞게 수정해주세요.
+interface UserProfilePayload {
+    name: string;
+    phone: string;
+    birth_date: string;
+}
+
+>>>>>>> Stashed changes
 import defaultProfileIcon from '../../assets/Iconwhite.svg';
 
 const ProfilePage = () => {
     const navigate = useNavigate();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const [userProfile, setUserProfile] = useState<
-        Omit<UserProfilePayload, 'profileImageUrl'>
-    >({
+    const [userProfile, setUserProfile] = useState({
         name: '',
-        dob: '',
+        dob: '', // YYMMDD 형식
         phone: '',
     });
 
@@ -54,15 +66,23 @@ const ProfilePage = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // [수정] 유효성 검사 로직 강화
         const newErrors = {
             name: !userProfile.name,
-            dob: !/^\d{6}$/.test(userProfile.dob),
-            phone: !userProfile.phone,
+            dob: !isValidDate(userProfile.dob),
+            // 전화번호 형식 검사 (하이픈 제외하고 010으로 시작하는 11자리)
+            phone: !/^010\d{8}$/.test(userProfile.phone.replace(/-/g, '')),
         };
+        
         const hasError = Object.values(newErrors).some(Boolean);
         setErrors(newErrors);
 
         if (hasError) {
+            if (newErrors.dob) {
+                alert('생년월일 6자리가 유효한 날짜가 아닙니다.');
+            } else if (newErrors.phone) {
+                alert('전화번호 형식이 올바르지 않습니다. (예: 01012345678)');
+            }
             return;
         }
 
@@ -75,18 +95,24 @@ const ProfilePage = () => {
                 imageUrl = response.profile_image_url;
             }
 
-            const finalProfilePayload: UserProfilePayload = {
-                ...userProfile,
-                profileImageUrl: imageUrl,
+            const { name, phone, dob } = userProfile;
+            
+            const yearPrefix = parseInt(dob.substring(0, 2), 10) > 50 ? '19' : '20';
+            const birth_date = `${yearPrefix}${dob.substring(0, 2)}-${dob.substring(2, 4)}-${dob.substring(4, 6)}`;
+
+            const profileData: UserProfilePayload = {
+                name,
+                phone,
+                birth_date,
             };
 
-            await registerProfile(finalProfilePayload);
-
+            await updateProfile(profileData);
+            
             alert('프로필이 성공적으로 등록되었습니다!');
-            navigate('/family/create');
+            navigate('/family/create-name');
         } catch (error) {
             console.error('프로필 등록 실패:', error);
-            alert('프로필 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
+            alert('프로필 등록 중 오류가 발생했습니다. 입력한 정보를 다시 확인해주세요.');
         } finally {
             setIsLoading(false);
         }

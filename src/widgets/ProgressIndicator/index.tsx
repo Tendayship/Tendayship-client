@@ -9,6 +9,25 @@ interface ProgressIndicatorProps {
 }
 
 const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ stepData }) => {
+    const getStepBgColor = (step: { isActive?: boolean; isCompleted?: boolean }) => {
+        if (step.isActive) {
+            return 'bg-green-600'; // Active step
+        }
+        if (step.isCompleted) {
+            return 'bg-[#709ECD]'; // Completed step
+        }
+        return 'bg-gray-400'; // Future step
+    };
+
+    const getLineBgColor = (index: number) => {
+        const currentStep = stepData[index];
+        const nextStep = stepData[index + 1];
+        if (currentStep?.isCompleted && (nextStep?.isActive || nextStep?.isCompleted)) {
+            return 'bg-[#709ECD]';
+        }
+        return 'bg-[#d9d9d9]';
+    };
+
     return (
         <nav
             className="fixed top-[100px] left-[719px] h-[45px] w-[483px]"

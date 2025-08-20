@@ -1,9 +1,6 @@
 // src/api/userApi.ts - Axios 기반으로 통합
 import axiosInstance from '../shared/api/axiosInstance';
 
-/**
- * Defines the data structure for the user's profile.
- */
 export type UserProfilePayload = {
     name: string;
     dob: string; // Expected as 6 digits (e.g., "990102") from the form
