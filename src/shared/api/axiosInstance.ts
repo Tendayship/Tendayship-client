@@ -33,8 +33,8 @@ axiosInstance.interceptors.response.use(
         // 401 에러 시 로그아웃 처리
         if (error.response?.status === 401) {
             localStorage.removeItem('access_token');
-            // 필요시 로그인 페이지로 리다이렉트
-            // window.location.href = '/login';
+            // 즉시 로그인 페이지로 리다이렉트
+            window.location.href = '/login';
         }
         return Promise.reject(error);
     }

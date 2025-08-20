@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const KakaoCallbackPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { login } = useAuth();
 
     useEffect(() => {
         const handleKakaoCallback = async () => {
@@ -21,31 +22,24 @@ const KakaoCallbackPage = () => {
             }
 
             try {
-                // 백엔드에서 이미 발급된 토큰을 저장
-                localStorage.setItem('access_token', token);
+                // AuthContext의 login 메서드 사용
+                login(token);
 
-                // 토큰 검증하여 사용자 정보 확인
-                const verifyResponse = await axios.get('/api/auth/verify', {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-
-                console.log('토큰 검증 응답:', verifyResponse.data);
-
-                // user_id가 "None"이면 신규 사용자로 판단
+                // user_id가 "None"이면 신규 사용자로 판단하여 프로필 페이지로
                 if (user_id === 'None' || user_id === null) {
                     navigate('/profile');
                 } else {
+                    // 기존 사용자는 메인 페이지로
                     navigate('/');
                 }
             } catch (err) {
-                console.error('토큰 검증 실패:', err);
-                localStorage.removeItem('access_token');
+                console.error('로그인 처리 실패:', err);
                 navigate('/login');
             }
         };
 
         handleKakaoCallback();
-    }, [location, navigate]);
+    }, [location, navigate, login]);
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-50">
