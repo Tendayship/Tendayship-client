@@ -1,5 +1,5 @@
 // src/api/familyApi.ts
-import axiosInstance from './axiosInstance.js';
+import axiosInstance from '../shared/api/axiosInstance';
 
 // API 요청 시 보낼 데이터의 타입
 export interface CreateGroupPayload {

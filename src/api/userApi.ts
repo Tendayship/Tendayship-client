@@ -1,5 +1,5 @@
-// The base URL for your API.
-const API_BASE_URL = '/api';
+// src/api/userApi.ts - Axios 기반으로 통합
+import axiosInstance from '../shared/api/axiosInstance';
 
 /**
  * Defines the data structure for the user's profile.
@@ -18,28 +18,21 @@ export type UserProfilePayload = {
 export async function uploadProfileImage(
     file: File
 ): Promise<{ profile_image_url: string }> {
-    // 1. localStorage에서 토큰 가져오기
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-        throw new Error('Authentication token not found.');
-    }
-
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch(`${API_BASE_URL}/profile/me/avatar`, {
-        method: 'POST',
-        // ✅ 변경점: 인증 헤더 추가
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-    });
+    // Axios는 자동으로 토큰을 추가하므로 수동 설정 불필요
+    const response = await axiosInstance.post<{ profile_image_url: string }>(
+        '/profile/me/avatar',
+        formData,
+        {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        }
+    );
 
-    if (!response.ok) {
-        throw new Error('Failed to upload profile image.');
-    }
-    return response.json();
+    return response.data;
 }
 
 /**
@@ -47,14 +40,8 @@ export async function uploadProfileImage(
  * Corresponds to: PUT /api/profile/me
  */
 export async function registerProfile(
-    payload: Omit<UserProfilePayload, 'profileImageUrl'>
-) {
-    // 1. localStorage에서 토큰 가져오기
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-        throw new Error('Authentication token not found.');
-    }
-
+    payload: UserProfilePayload
+): Promise<{ success: boolean; data?: unknown }> {
     // Convert 6-digit dob to YYYY-MM-DD format
     const yearPrefix =
         parseInt(payload.dob.substring(0, 2), 10) > 50 ? '19' : '20';
@@ -67,24 +54,11 @@ export async function registerProfile(
         name: payload.name,
         phone: payload.phone,
         birth_date: birth_date,
+        profileImageUrl: payload.profileImageUrl,
     };
 
-    const response = await fetch(`${API_BASE_URL}/profile/me`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            // ✅ 변경점: 인증 헤더 추가
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(apiPayload),
-    });
+    // Axios는 자동으로 토큰과 JSON 헤더를 추가
+    const response = await axiosInstance.put('/profile/me', apiPayload);
 
-    if (!response.ok) {
-        const errorData = await response
-            .json()
-            .catch(() => ({ message: 'An unknown error occurred.' }));
-        throw new Error(errorData.message || 'Failed to register profile.');
-    }
-
-    return response.json();
+    return response.data;
 }
