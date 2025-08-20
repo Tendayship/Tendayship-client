@@ -1,16 +1,7 @@
-<<<<<<< Updated upstream:src/pages/FamilyCreationPage/index.tsx
 // src/pages/FamilyCreationPage/index.tsx (연결 및 개선 완료)
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // ◀️ 페이지 이동 hook
 import { createFamilyGroup } from '../../api/familyApi'; // ◀️ 우리가 만든 API 함수
-=======
-// 파일명: src/pages/FamilyCreationPage/FamilyCreationNamePage.tsx
->>>>>>> Stashed changes:src/pages/FamilyCreation.makenamePage/index.tsx
-
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '../../shared/ui/Header';
-import { createFamilyGroup } from '../../api/familyApi';
 
 const FamilyCreationNamePage = () => {
     const navigate = useNavigate();

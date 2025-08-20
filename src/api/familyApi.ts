@@ -1,9 +1,5 @@
-<<<<<<< Updated upstream
 // src/api/familyApi.ts
 import axiosInstance from '../shared/api/axiosInstance';
-=======
-import axiosInstance from './axiosInstance.js';
->>>>>>> Stashed changes
 
 // --- 기존 함수들 (변경 없음) ---
 
