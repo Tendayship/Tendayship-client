@@ -1,29 +1,7 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import axios from 'axios';
-
-interface User {
-    id: string;
-    name: string;
-    email: string;
-    phone?: string;
-    birth_date?: string;
-    profile_image_url?: string;
-    is_active: boolean;
-    created_at: string;
-    updated_at: string;
-}
-
-interface AuthContextType {
-    isAuthenticated: boolean;
-    isLoading: boolean;
-    user: User | null;
-    login: (token: string) => void;
-    logout: () => void;
-    refreshAuth: () => Promise<void>;
-}
-
-const AuthContext = createContext<AuthContextType | null>(null);
+import { AuthContext, type User } from './AuthContext';
 
 interface AuthProviderProps {
     children: ReactNode;
@@ -100,12 +78,4 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             {children}
         </AuthContext.Provider>
     );
-};
-
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within AuthProvider');
-    }
-    return context;
 };
