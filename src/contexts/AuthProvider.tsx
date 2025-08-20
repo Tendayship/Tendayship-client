@@ -18,23 +18,26 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const checkAuthStatus = async () => {
     try {
-      // 쿠키 기반 토큰 검증 - axiosInstance 사용, withCredentials 자동 적용
-      await axiosInstance.get('/auth/verify');
-      
-      // 사용자 정보 가져오기
-      const userResponse = await axiosInstance.get('/auth/me');
-      
-      setIsAuthenticated(true);
-      setUser(userResponse.data);
+        await axiosInstance.get('/auth/verify');
+        const userResponse = await axiosInstance.get('/auth/me');
+        
+        setIsAuthenticated(true);
+        setUser(userResponse.data);
     } catch (error) {
-      console.error('인증 실패:', error);
-      // 쿠키 기반 인증이므로 localStorage 처리 불필요
-      setIsAuthenticated(false);
-      setUser(null);
+        // 초기 로딩 시 401은 정상적인 미로그인 상태
+        if (error.response?.status === 401) {
+        console.log('미로그인 상태 - 정상');
+        } else {
+        console.error('인증 확인 중 오류:', error);
+        }
+        
+        setIsAuthenticated(false);
+        setUser(null);
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  };
+    };
+
 
   const login = async () => {
     // 쿠키 기반 인증이므로 토큰 매개변수 제거
