@@ -23,12 +23,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       
       setIsAuthenticated(true);
       setUser(userResponse.data);
-    } catch (error: any) {  // ← error를 any 타입으로 단언하여 TS18046 에러 해결
-      // 초기 로딩 시 401은 정상적인 미로그인 상태
-      if (error?.response?.status === 401) {
+    } catch (unknownError) {
+      // 타입 가드를 사용한 안전한 에러 처리
+      function isAxiosError(error: unknown): error is { response?: { status?: number } } {
+        return (
+          typeof error === 'object' &&
+          error !== null &&
+          'response' in error &&
+          typeof (error as { response?: unknown }).response === 'object'
+        );
+      }
+
+      if (isAxiosError(unknownError) && unknownError.response?.status === 401) {
         console.log('미로그인 상태 - 정상');
       } else {
-        console.error('인증 확인 중 오류:', error);
+        console.error('인증 확인 중 오류:', unknownError);
       }
       
       setIsAuthenticated(false);
@@ -48,8 +57,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       // 서버에 로그아웃 요청하여 쿠키 무효화 - axiosInstance 사용
       await axiosInstance.post('/auth/logout', {});
-    } catch (error: any) {  // ← 여기도 any 타입으로 단언
-      console.error('로그아웃 요청 실패:', error);
+    } catch (unknownError) {
+      // 타입 가드를 사용한 안전한 에러 처리
+      console.error('로그아웃 요청 실패:', unknownError);
     } finally {
       // 클라이언트 상태 초기화
       setIsAuthenticated(false);
