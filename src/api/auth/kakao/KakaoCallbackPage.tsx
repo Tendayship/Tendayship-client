@@ -38,13 +38,13 @@ const KakaoCallbackPage = () => {
 
       try {
         // 쿠키 기반 인증 상태 확인 - axiosInstance 사용
-        const res = await axiosInstance.get('/api/auth/verify');
+        const res = await axiosInstance.get('/auth/verify');
         if (res.status !== 200) {
           throw new Error('verify_failed');
         }
 
         // 사용자 정보 가져오기 - axiosInstance 사용
-        const userRes = await axiosInstance.get('/api/auth/me');
+        const userRes = await axiosInstance.get('/auth/me');
 
         if (isPopup) {
           // 팝업 모드에서는 부모창으로 성공 메시지 전송

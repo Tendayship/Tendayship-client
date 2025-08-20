@@ -21,7 +21,7 @@ export default function KakaoLoginButton() {
 
     try {
       // axiosInstance 사용 - withCredentials 자동 적용
-      const { data } = await axiosInstance.get<KakaoUrlResponse>('/api/auth/kakao/url');
+      const { data } = await axiosInstance.get<KakaoUrlResponse>('/auth/kakao/url');
       
       const loginUrl = data?.login_url ?? data?.loginUrl;
       if (!loginUrl) throw new Error('로그인 URL을 받아오지 못했습니다.');
@@ -55,7 +55,7 @@ export default function KakaoLoginButton() {
                 await login();
                 
                 // 사용자 정보 확인하여 라우팅 - axiosInstance 사용
-                const userRes = await axiosInstance.get('/api/auth/me');
+                const userRes = await axiosInstance.get('/auth/me');
                 
                 // 신규 사용자 판단 로직
                 const isNewUser = !userRes.data.name || !userRes.data.phone;

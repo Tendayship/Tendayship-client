@@ -19,10 +19,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const checkAuthStatus = async () => {
     try {
       // 쿠키 기반 토큰 검증 - axiosInstance 사용, withCredentials 자동 적용
-      await axiosInstance.get('/api/auth/verify');
+      await axiosInstance.get('/auth/verify');
       
       // 사용자 정보 가져오기
-      const userResponse = await axiosInstance.get('/api/auth/me');
+      const userResponse = await axiosInstance.get('/auth/me');
       
       setIsAuthenticated(true);
       setUser(userResponse.data);
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const logout = async () => {
     try {
       // 서버에 로그아웃 요청하여 쿠키 무효화 - axiosInstance 사용
-      await axiosInstance.post('/api/auth/logout', {});
+      await axiosInstance.post('/auth/logout', {});
     } catch (error) {
       console.error('로그아웃 요청 실패:', error);
     } finally {
