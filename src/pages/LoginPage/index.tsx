@@ -5,12 +5,12 @@ const LoginPage = () => {
     return (
         <div className="flex min-h-screen flex-col bg-[#F1F1F1]">
             <Header />
-            <main className="flex flex-grow items-center justify-center p-4">
-                <div className="h-[450px] w-[520px] border border-[#C2C2C2] bg-[#FFF] px-[50px] py-[40px] text-center">
+            <main className="flex flex-grow items-center gap-2.5 justify-center p-4 ">
+                <div className="h-[400px] w-[500px] bg-[#FFF] px-[50px] py-[40px] text-center rounded-[15px] shadow-[var(--)]">
                     <h1 className="font-pretendard mb-[20px] text-[32px] text-[#000]">
                         로그인
                     </h1>
-                    <p className="font-pretendard mb-[74px] text-[18px] text-[#6A6A6A]">
+                    <p className="font-pretendard mb-[56px] text-[18px] text-[#6A6A6A]">
                         "소중한 이야기, 가족과 함께 이어드립니다."
                     </p>
 
@@ -30,7 +30,7 @@ const LoginPage = () => {
                         </label>
                     </div>
 
-                    <hr className="mb-[16px] w-full border-[#C2C2C2]" />
+                    <hr className="mb-[16px] w-[400px] background-[#C2C2C2] height-[1.5px]" />
                     <div className="text-sm">
                         <p className="font-pretendard text-[16px] text-[#6A6A6A]">
                             아직 계정이 없으신가요?{' '}
