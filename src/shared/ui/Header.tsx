@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import logo from '../../assets/erdream.png';
+import menuIcon from '../../assets/3lines.svg';
+import mypageIcon from '../../assets/humanIcon.svg';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -65,13 +68,12 @@ const Header = () => {
                         </div>
                     )}
                 </div>
-
                 <a
                     href="#"
                     className="text-gray-600 hover:text-gray-800 focus:outline-none"
                 >
                     <img
-                        src="/humanlogo.svg"
+                        src={mypageIcon}
                         alt="마이페이지"
                         className="h-[28px] w-[28px]"
                     />

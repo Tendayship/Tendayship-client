@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { registerProfile, uploadProfileImage } from '../../api/userApi';
 import type { UserProfilePayload } from '../../api/userApi';
+import defaultProfileIcon from '../../assets/Iconwhite.svg';
 
 const ProfilePage = () => {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ const ProfilePage = () => {
         preview: string;
     }>({
         file: null,
-        preview: '/path/to/humanIconwhite.svg', // Default icon path
+        preview: defaultProfileIcon,
     });
 
     const [errors, setErrors] = useState({
@@ -29,22 +30,17 @@ const ProfilePage = () => {
         phone: false,
     });
 
-    // State for loading indicator
     const [isLoading, setIsLoading] = useState(false);
-
-    // Handles changes for text inputs (name, dob, phone)
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
         setUserProfile((prevProfile) => ({ ...prevProfile, [id]: value }));
         setErrors((prevErrors) => ({ ...prevErrors, [id]: false }));
     };
 
-    // Triggers the hidden file input when the profile picture button is clicked
     const handleProfileImageClick = () => {
         fileInputRef.current?.click();
     };
 
-    // Handles the file selection for the profile image
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -55,7 +51,6 @@ const ProfilePage = () => {
         }
     };
 
-    // Handles form submission
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -75,32 +70,27 @@ const ProfilePage = () => {
 
         try {
             let imageUrl = '';
-            // 1. If a profile image file is selected, upload it first.
             if (profileImage.file) {
-                // The API function `uploadProfileImage` would take the file and return the URL.
                 const response = await uploadProfileImage(profileImage.file);
-                imageUrl = response.profile_image_url; // Assuming the API returns an object with the URL
+                imageUrl = response.profile_image_url;
             }
 
-            // 2. Prepare the final payload with the image URL.
             const finalProfilePayload: UserProfilePayload = {
                 ...userProfile,
                 profileImageUrl: imageUrl,
             };
 
-            // 3. Register the user's profile with all data.
             await registerProfile(finalProfilePayload);
 
             alert('프로필이 성공적으로 등록되었습니다!');
-            navigate('/family/create'); // Navigate to the next page on success.
+            navigate('/family/create');
         } catch (error) {
             console.error('프로필 등록 실패:', error);
             alert('프로필 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
         } finally {
-            setIsLoading(false); // Stop loading, whether success or failure.
+            setIsLoading(false);
         }
     };
-
     return (
         <main className="flex min-h-screen items-center justify-center bg-[#F1F1F1] p-4">
             <div className="h-[800px] w-[500px] rounded-[15px] bg-[#FFF] p-[50px] text-center shadow-lg">
