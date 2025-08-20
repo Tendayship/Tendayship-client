@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import DaumPostcode from 'react-daum-postcode'; // ◀️ 우편번호 라이브러리 import
-import Header from '../../shared/ui/Header';
 import ProgressIndicator from '../../widgets/ProgressIndicator';
 import { registerRecipient } from '../../api/familyApi.js'; // ◀️ API 함수 import
 import type { RecipientPayload } from '../../api/familyApi.js';
@@ -100,64 +99,59 @@ const AddressPage = () => {
 
     return (
         <>
-            <div className="flex min-h-screen flex-col bg-gray-100">
-                <Header />
-                <div className="mt-20 flex flex-col items-center">
-                    <ProgressIndicator stepData={stepData} />
-                    <main className="mt-10 w-[500px] rounded-lg bg-white p-10 text-center shadow-lg">
-                        <h1 className="mb-2 text-3xl font-bold">주소</h1>
-                        <p className="mb-8 text-gray-600">
-                            배송 받으실 주소를 입력해 주세요
-                        </p>
+            <div className="flex min-h-screen flex-col items-center bg-gray-100 pt-20">
+                <ProgressIndicator stepData={stepData} />
+                <main className="mt-10 w-[500px] rounded-lg bg-white p-10 text-center shadow-lg">
+                    <h1 className="mb-2 text-3xl font-bold">주소</h1>
+                    <p className="mb-8 text-gray-600">
+                        배송 받으실 주소를 입력해 주세요
+                    </p>
 
-                        <form
-                            onSubmit={handleSubmit}
-                            className="flex flex-col items-center space-y-6"
-                        >
-                            {/* 받는 사람, 상세 주소, 전화번호 입력 필드는 생략 (기존 코드와 동일) */}
+                    <form
+                        onSubmit={handleSubmit}
+                        className="flex flex-col items-center space-y-6"
+                    >
+                        {/* 받는 사람, 상세 주소, 전화번호 입력 필드는 생략 (기존 코드와 동일) */}
 
-                            {/* 우편 번호 필드 */}
-                            <div className="w-full text-left">
-                                <label
-                                    htmlFor="postcode"
-                                    className="mb-1 block text-sm font-medium text-gray-700"
-                                >
-                                    우편 번호
-                                </label>
-                                <div className="flex space-x-2">
-                                    <input
-                                        type="text"
-                                        id="postcode"
-                                        placeholder="우편 번호를 입력하세요"
-                                        value={addressInfo.postcode}
-                                        onChange={handleInputChange}
-                                        className="h-12 flex-1 rounded-md border border-gray-300 px-4"
-                                        readOnly
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            setIsPostcodeModalOpen(true)
-                                        } // ◀️ 클릭 시 모달 열기
-                                        className="h-12 rounded-md bg-[#709ECD] px-4 text-white hover:bg-[#5a8ac4]"
-                                    >
-                                        우편 번호 찾기
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* ... 상세주소, 전화번호 input ... */}
-
-                            <button
-                                type="submit"
-                                className="mt-6 h-12 w-full rounded-lg bg-green-600 font-semibold text-white transition-colors hover:bg-green-700 disabled:bg-gray-400"
-                                disabled={isLoading}
+                        {/* 우편 번호 필드 */}
+                        <div className="w-full text-left">
+                            <label
+                                htmlFor="postcode"
+                                className="mb-1 block text-sm font-medium text-gray-700"
                             >
-                                {isLoading ? '등록 중...' : '등록'}
-                            </button>
-                        </form>
-                    </main>
-                </div>
+                                우편 번호
+                            </label>
+                            <div className="flex space-x-2">
+                                <input
+                                    type="text"
+                                    id="postcode"
+                                    placeholder="우편 번호를 입력하세요"
+                                    value={addressInfo.postcode}
+                                    onChange={handleInputChange}
+                                    className="h-12 flex-1 rounded-md border border-gray-300 px-4"
+                                    readOnly
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setIsPostcodeModalOpen(true)} // ◀️ 클릭 시 모달 열기
+                                    className="h-12 rounded-md bg-[#709ECD] px-4 text-white hover:bg-[#5a8ac4]"
+                                >
+                                    우편 번호 찾기
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* ... 상세주소, 전화번호 input ... */}
+
+                        <button
+                            type="submit"
+                            className="mt-6 h-12 w-full rounded-lg bg-green-600 font-semibold text-white transition-colors hover:bg-green-700 disabled:bg-gray-400"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? '등록 중...' : '등록'}
+                        </button>
+                    </form>
+                </main>
             </div>
 
             {/* ◀️ 우편번호 검색 모달 */}
