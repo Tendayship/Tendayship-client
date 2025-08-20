@@ -1,8 +1,6 @@
-// src/shared/api/request.ts - Axios 기반으로 통합
-import type { AxiosResponse, AxiosRequestConfig } from 'axios';
-import axiosInstance from './axiosInstance';
+// src/shared/api/request.ts
+import { API_BASE, joinUrl } from './config';
 
-// 기존 HttpError 클래스 유지 (호환성)
 export class HttpError extends Error {
     status: number;
     body?: unknown;
@@ -13,83 +11,92 @@ export class HttpError extends Error {
     }
 }
 
-// FastAPI 표준 오류 포맷
-export type FastApiValidationError = {
-    loc: (string | number)[];
-    msg: string;
-    type: string;
-};
+type Json =
+    | string
+    | number
+    | boolean
+    | null
+    | { [key: string]: Json }
+    | Json[];
 
-export type FastApiErrorBody =
-    | { detail: string }
-    | { detail: FastApiValidationError[] };
-
-type Json = string | number | boolean | null | { [key: string]: Json } | Json[];
-
-// Axios 응답을 기존 인터페이스와 호환되게 변환
-async function axiosRequest<T>(
-    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+async function request<T>(
     path: string,
-    data?: Json,
-    config?: AxiosRequestConfig
+    init: RequestInit = {}
 ): Promise<T> {
+    const url = joinUrl(API_BASE, path);
+    const headers = new Headers(init.headers);
+
+    // 자동 JSON 헤더
+    if (init.body && !headers.has('Content-Type')) {
+        headers.set('Content-Type', 'application/json');
+    }
+
+    const res = await fetch(url, { ...init, headers });
+    const text = await res.text();
+    const data = text ? safeJson(text) : undefined;
+
+    if (!res.ok) throw new HttpError(res.status, data);
+    return data as T;
+}
+
+function safeJson(input: string) {
     try {
-        const response: AxiosResponse<T> = await axiosInstance.request({
-            method,
-            url: path,
-            data,
-            ...config,
-        });
-        return response.data;
-    } catch (error: unknown) {
-        // Axios 에러를 HttpError로 변환 (기존 코드 호환성)
-        if (error && typeof error === 'object' && 'response' in error) {
-            const axiosError = error as {
-                response: { status: number; data: unknown };
-            };
-            throw new HttpError(
-                axiosError.response.status,
-                axiosError.response.data
-            );
-        }
-        throw error;
+        return JSON.parse(input);
+    } catch {
+        return input;
     }
 }
 
-// 기존 http 인터페이스 유지 (하위 호환성)
 export const http = {
-    get<T>(path: string, config?: AxiosRequestConfig): Promise<T> {
-        return axiosRequest<T>('GET', path, undefined, config);
+    get<T>(path: string, init?: RequestInit) {
+        return request<T>(path, { ...init, method: 'GET' });
     },
-
     post<T, B extends Json = Json>(
         path: string,
         body?: B,
-        config?: AxiosRequestConfig
-    ): Promise<T> {
-        return axiosRequest<T>('POST', path, body, config);
+        init?: RequestInit
+    ) {
+        return request<T>(path, {
+            ...init,
+            method: 'POST',
+            body:
+                body != null
+                    ? JSON.stringify(body)
+                    : undefined,
+        });
     },
-
     put<T, B extends Json = Json>(
         path: string,
         body?: B,
-        config?: AxiosRequestConfig
-    ): Promise<T> {
-        return axiosRequest<T>('PUT', path, body, config);
+        init?: RequestInit
+    ) {
+        return request<T>(path, {
+            ...init,
+            method: 'PUT',
+            body:
+                body != null
+                    ? JSON.stringify(body)
+                    : undefined,
+        });
     },
-
     patch<T, B extends Json = Json>(
         path: string,
         body?: B,
-        config?: AxiosRequestConfig
-    ): Promise<T> {
-        return axiosRequest<T>('PATCH', path, body, config);
+        init?: RequestInit
+    ) {
+        return request<T>(path, {
+            ...init,
+            method: 'PATCH',
+            body:
+                body != null
+                    ? JSON.stringify(body)
+                    : undefined,
+        });
     },
-
-    delete<T>(path: string, config?: AxiosRequestConfig): Promise<T> {
-        return axiosRequest<T>('DELETE', path, undefined, config);
+    delete<T>(path: string, init?: RequestInit) {
+        return request<T>(path, {
+            ...init,
+            method: 'DELETE',
+        });
     },
 };
-
-// 직접 axios 인스턴스도 export (고급 사용자용)
-export { default as axios } from './axiosInstance';

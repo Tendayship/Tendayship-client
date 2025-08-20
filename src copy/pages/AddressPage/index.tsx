@@ -2,8 +2,8 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import DaumPostcode from 'react-daum-postcode'; // ◀️ 우편번호 라이브러리 import
-import Header from '../../shared/ui/Header';
-import ProgressIndicator from '../../widgets/ProgressIndicator';
+import Header from '../../shared/ui/Header.js';
+import ProgressIndicator from '../../widgets/ProgressIndicator/index.js';
 import { registerRecipient } from '../../api/familyApi.js'; // ◀️ API 함수 import
 import type { RecipientPayload } from '../../api/familyApi.js';
 
