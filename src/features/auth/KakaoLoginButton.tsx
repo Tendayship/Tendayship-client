@@ -92,7 +92,6 @@ export default function KakaoLoginButton() {
         window.addEventListener('message', handleMessage);
 
         // 팝업이 닫혔을 때 정리 및 타임아웃 처리
-        let timeoutId: number;
         const checkClosed = setInterval(() => {
           if (popup.closed) {
             clearInterval(checkClosed);
@@ -104,8 +103,8 @@ export default function KakaoLoginButton() {
         }, 1000);
 
         // 5분 타임아웃 - 팝업이 응답하지 않을 경우 정리
-        timeoutId = setTimeout(() => {
-          console.log('⏰ Login timeout - closing popup');
+        const timeoutId = setTimeout(() => {
+          console.log(' Login timeout - closing popup');
           if (!popup.closed) {
             popup.close();
           }

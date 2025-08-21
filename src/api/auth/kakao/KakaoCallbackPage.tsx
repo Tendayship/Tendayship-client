@@ -62,20 +62,20 @@ const KakaoCallbackPage = () => {
             setTimeout(() => {
               try {
                 window.close();
-              } catch (e) {
+              } catch  {
                 console.log('Could not close popup automatically');
                 setMessage('로그인이 완료되었습니다. 이 창을 닫아주세요.');
               }
             }, 1500);
             
-          } catch (e) {
-            console.error('Failed to send message to parent:', e);
+          } catch {
+            console.error('Failed to send message to parent:');
             // 메시지 전송 실패 시에도 창 닫기 시도
             setMessage('로그인이 완료되었습니다. 이 창을 닫아주세요.');
             setTimeout(() => {
               try {
                 window.close();
-              } catch (e) {
+              } catch {
                 console.log('Could not close popup automatically');
               }
             }, 2000);
@@ -119,8 +119,8 @@ const KakaoCallbackPage = () => {
               type: 'KAKAO_LOGIN_ERROR',
               error: errorMessage
             }, window.location.origin);
-          } catch (e) {
-            console.error('Failed to send error message to parent:', e);
+          } catch {
+            console.error('Failed to send error message to parent:');
           }
           
           // 에러 시에도 창 닫기
