@@ -1,26 +1,8 @@
-import { Link } from 'react-router-dom';
 import KakaoLoginButton from '../../features/auth/KakaoLoginButton';
 
 const LandingPage = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
-            {/* 헤더 */}
-            <header className="flex h-20 w-full items-center justify-between px-6 lg:px-12">
-                <div className="flex items-center">
-                    <img
-                        src="/yeo-dream-logo.png"
-                        alt="이어드림 로고"
-                        className="h-12 w-auto"
-                    />
-                </div>
-                <Link
-                    to="/login"
-                    className="rounded-lg bg-green-600 px-6 py-2 text-white transition-colors hover:bg-green-700"
-                >
-                    로그인
-                </Link>
-            </header>
-
             {/* 메인 콘텐츠 */}
             <main className="container mx-auto px-6 py-16 lg:px-12">
                 <div className="grid items-center gap-12 lg:grid-cols-2">

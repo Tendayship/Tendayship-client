@@ -43,7 +43,7 @@ const Header = () => {
     ];
 
     return (
-        <header className="relative flex h-[120px] w-full items-center border-b border-[#C2C2C2] bg-[#FFFFFF33] px-[64px]">
+        <header className="relative flex h-[60px] w-full items-center border-b border-[#C2C2C2] bg-[#FFFFFF33] px-[64px]">
             {/* 로고 */}
             <Link to="/" className="mx-auto">
                 <img
