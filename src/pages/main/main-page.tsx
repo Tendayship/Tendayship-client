@@ -10,7 +10,7 @@ export default function MainPage() {
                 {/* 환영 메시지 */}
                 <div className="mb-8 rounded-lg bg-white p-6 shadow-sm">
                     <h1 className="mb-2 text-2xl font-bold text-gray-900">
-                        안녕하세요, {user?.name || '사용자'}님! 👋
+                        안녕하세요, {user?.name || '사용자'}님!
                     </h1>
                     <p className="text-gray-600">
                         오늘도 가족들과 소중한 이야기를 나누어보세요.
@@ -193,7 +193,7 @@ export default function MainPage() {
                     <div className="text-center text-gray-500">
                         <p>아직 활동 내역이 없습니다.</p>
                         <p className="mt-2">
-                            가족 그룹을 만들고 첫 소식을 작성해보세요! 📝
+                            가족 그룹을 만들고 첫 소식을 작성해보세요!
                         </p>
                     </div>
                 </div>

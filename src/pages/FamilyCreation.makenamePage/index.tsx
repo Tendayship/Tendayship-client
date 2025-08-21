@@ -1,15 +1,13 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { createFamilyGroup } from '../../api/familyApi';
+import { useNavigate } from 'react-router-dom'; // 페이지 이동 hook
+import { createFamilyGroup } from '../../api/familyApi'; // 우리가 만든 API 함수
 
 // This component handles the creation of a new family group by name.
 const FamilyCreationNamePage = () => {
     const navigate = useNavigate();
     const [groupName, setGroupName] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    // State to show messages to the user
-    const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' | null } | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태 추가
 
     // Handles changes to the input field
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,8 +29,7 @@ const FamilyCreationNamePage = () => {
         setMessage(null); // Clear previous messages
 
         try {
-            // Call the API function to create the family group
-            // The actual API call is mocked in '../../api/familyApi.ts'
+            // API 호출: groupName을 payload에 담아 전송
             const newGroup = await createFamilyGroup({ name: groupName });
             
             // Set a success message
@@ -41,8 +38,10 @@ const FamilyCreationNamePage = () => {
                 type: 'success',
             });
 
-            // Navigate to the next page upon success
-            navigate(`/family/create-address/${newGroup.id}`);
+            alert(`"${newGroup.name}" 가족 그룹이 성공적으로 생성되었습니다!`);
+
+            // 성공 시, 생성된 그룹의 상세 페이지로 이동 (ID 활용)
+            navigate(`/family/${newGroup.id}`);
         } catch (err) {
             console.error('가족 그룹 생성 실패:', err);
             // Set an error message

@@ -1,15 +1,15 @@
 // src/pages/FamilyManagementPage/index.tsx (연결 및 개선 완료)
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { joinGroupByCode } from '../../api/familyApi'; // ◀️ API 함수 import
+import { joinGroupByCode } from '../../api/familyApi'; // API 함수 import
 
 const FamilyManagementPage = () => {
     const navigate = useNavigate();
     const [familyCode, setFamilyCode] = useState<string>('');
     const [selectedRelationship, setSelectedRelationship] =
-        useState<string>(''); // ◀️ 초기값을 빈 문자열로 변경
+        useState<string>(''); // 초기값을 빈 문자열로 변경
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [errors, setErrors] = useState({ code: false, relationship: false }); // ◀️ 에러 상태 관리
+    const [errors, setErrors] = useState({ code: false, relationship: false }); // 에러 상태 관리
 
     const handleFamilyCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFamilyCode(e.target.value);
@@ -27,7 +27,7 @@ const FamilyManagementPage = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // ◀️ 유효성 검사
+        // 유효성 검사
         const codeError = !familyCode.trim();
         const relationshipError = !selectedRelationship;
         if (codeError || relationshipError) {
@@ -37,14 +37,14 @@ const FamilyManagementPage = () => {
 
         setIsLoading(true);
         try {
-            // ◀️ API 호출
+            // API 호출
             const joinedGroup = await joinGroupByCode({
                 inviteCode: familyCode,
                 relationship: selectedRelationship,
             });
 
             alert(`'${joinedGroup.groupName}' 그룹에 성공적으로 가입했습니다!`);
-            navigate(`/family/${joinedGroup.groupId}`); // ◀️ 성공 시 가입한 그룹 페이지로 이동
+            navigate(`/family/${joinedGroup.groupId}`); // 성공 시 가입한 그룹 페이지로 이동
         } catch (error: unknown) {
             console.error('그룹 가입 실패:', error);
         } finally {
