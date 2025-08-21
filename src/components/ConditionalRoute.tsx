@@ -1,4 +1,4 @@
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts';
 import LandingPage from '../pages/LandingPage';
 import MainPage from '../pages/main/main-page';
 
