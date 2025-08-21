@@ -40,7 +40,7 @@ export default function MainPage() {
                             </svg>
                         </div>
                         <h3 className="mb-2 text-lg font-semibold text-gray-900">
-                            가족 그룹 생성
+                            가족 그룹
                         </h3>
                         <p className="text-gray-600">
                             새로운 가족 그룹을 만들어 멤버들을 초대하세요.

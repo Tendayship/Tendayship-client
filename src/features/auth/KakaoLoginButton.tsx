@@ -6,6 +6,11 @@ import kakaoLogo from '../../assets/kakao_talk.png';
 
 type KakaoUrlResponse = { login_url?: string; loginUrl?: string };
 
+// Props type definition
+type KakaoLoginButtonProps = {
+    children?: ReactNode; // ✅ children prop is now accepted
+};
+
 const BUTTON_BASE =
   'flex h-16 w-[400px] items-center justify-center rounded-[10px] bg-[#FEE500] text-[#371D1E] text-[22px] font-Pretendard focus:outline-none transition-colors hover:bg-[#FDE133] disabled:opacity-70 disabled:cursor-not-allowed';
 
