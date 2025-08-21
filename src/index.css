@@ -1,2 +1,19 @@
 @import 'tailwindcss';
 
+@font-face {
+    font-family: 'KyoboHandwriting2020A';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2112@1.0/KyoboHandwriting2020A.woff')
+        format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.font-kyobo {
+    font-family: 'KyoboHandwriting2020A', serif !important;
+    color: white !important;
+}
+
+/* 헤로 섹션 텍스트 강제 흰색 적용 */
+.text-white {
+    color: white !important;
+}

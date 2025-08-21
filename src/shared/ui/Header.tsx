@@ -1,8 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [devBypassAuth, setDevBypassAuth] = useState(false);
+
+    useEffect(() => {
+        // 컴포넌트 마운트 시 localStorage에서 상태 읽기
+        const bypassStatus = localStorage.getItem('dev_bypass_auth') === 'true';
+        setDevBypassAuth(bypassStatus);
+    }, []);
+
+    const toggleDevBypass = () => {
+        const newStatus = !devBypassAuth;
+        setDevBypassAuth(newStatus);
+
+        if (newStatus) {
+            localStorage.setItem('dev_bypass_auth', 'true');
+        } else {
+            localStorage.removeItem('dev_bypass_auth');
+        }
+
+        // 상태 변경 후 페이지 새로고침
+        window.location.reload();
+    };
 
     const navigationLinks = [
         { path: '/', label: '메인 페이지' },
@@ -64,6 +85,30 @@ const Header = () => {
                                         {link.label}
                                     </Link>
                                 ))}
+
+                                {/* 개발자 도구 섹션 */}
+                                <div className="mt-2 border-t pt-2">
+                                    <div className="mb-2 text-center text-xs font-medium text-gray-500">
+                                        🛠️ 개발자 도구
+                                    </div>
+                                    <button
+                                        onClick={toggleDevBypass}
+                                        className={`w-full rounded px-3 py-2 text-sm font-medium transition-colors ${
+                                            devBypassAuth
+                                                ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
+                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        }`}
+                                    >
+                                        {devBypassAuth
+                                            ? '🔓 로그인 우회 ON'
+                                            : '🔒 로그인 우회 OFF'}
+                                    </button>
+                                    {devBypassAuth && (
+                                        <div className="mt-1 px-3 py-1 text-xs text-yellow-600">
+                                            ⚠️ 모든 보호된 페이지에 접근 가능
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     )}
