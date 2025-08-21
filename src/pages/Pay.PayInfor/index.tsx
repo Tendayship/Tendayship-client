@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { preparePayment } from '../../api/familyApi';
-import PaymentHeader from '../../shared/ui/PaymentHeader.js';
+// import PaymentHeader from '../../shared/ui/PaymentHeader.js';
 
 // ... (subscriptionInfo, paymentInfo 등 변수는 동일) ...
 const subscriptionInfo = {
@@ -88,7 +88,7 @@ const PaymentPage = () => {
 
     return (
         <div className="flex min-h-screen flex-col bg-[#f1f1f1]">
-            <PaymentHeader />
+            {/* <PaymentHeader /> */}
             <div className="flex flex-grow items-center justify-center bg-[#018941] pt-[60px]">
 
                 <main className="top-[115px] h-auto w-[500px] overflow-y-auto rounded-lg bg-white p-12">

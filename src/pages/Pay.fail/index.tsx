@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import Header from '../../shared/ui/Header'; // 공통 헤더
+// import Header from '../../shared/ui/Header'; // 공통 헤더
 
 const PaymentFailPage = () => {
     const navigate = useNavigate();
@@ -11,7 +11,7 @@ const PaymentFailPage = () => {
 
     return (
         <div className="flex min-h-screen flex-col bg-[#f1f1f1]">
-            <Header />
+            {/* <Header /> */}
             <main className="flex flex-grow items-center justify-center p-4">
                 <div className="w-full max-w-md rounded-lg bg-white p-10 text-center shadow-lg">
                     <h1 className="text-3xl font-bold text-red-600">😥</h1>

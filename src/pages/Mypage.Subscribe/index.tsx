@@ -14,7 +14,7 @@ import frame1707484832 from "../../assets/erdream.png";
 // import navBg from "../../assets/erdream.png";
 import subscriptionBg from '../../assets/mypagebackground.jpg';
 
-export const SubscriptionPageComponent = (): JSX.Element => {
+const SubscriptionPageComponent = (): JSX.Element => {
     const navigate = useNavigate();
     const [subscription, setSubscription] = useState<SubscriptionData | null>(null);
     const [visibleRecords, setVisibleRecords] = useState(5);
@@ -150,3 +150,4 @@ export const SubscriptionPageComponent = (): JSX.Element => {
         </div>
     );
 };
+export default SubscriptionPageComponent;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Header from '../../shared/ui/Header';
+// import Header from '../../shared/ui/Header';
 // [삭제] import { createSubscription } from '../../api/familyApi';
 
 const SubscriptionPage = () => {
@@ -19,7 +19,7 @@ const SubscriptionPage = () => {
 
     return (
         <div className="flex min-h-screen flex-col bg-[#F1F1F1]">
-            <Header />
+            {/* <Header /> */}
             <main className="flex flex-grow items-center justify-center p-4">
                 <div className="h-auto w-[500px] border border-[#C2C2C2] bg-[#FFF] p-[50px] text-center">
                     <h1 className="mt-[-10px] mb-[20px] text-[32px] font-bold text-[#000]">

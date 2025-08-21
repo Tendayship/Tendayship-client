@@ -10,25 +10,40 @@ import ConditionalRoute from '../../components/ConditionalRoute';
 import ApiTestPage from '../../pages/test/api-test-page';
 import LoginPage from '../../pages/LoginPage';
 import ProfilePage from '../../pages/ProfilePage';
-import FamilyCreationPage from '../../pages/FamilyCreationPage';
+import FamilyCreationPage from '../../pages/FamilyCreation.Sucess';
 import FamilyCodeInputPage from '../../pages/FamilyCodeinput';
 import FamilyGroupPage from '../../pages/FamilyGroupPage';
 import FamilyManagementPage from '../../pages/FamilyManagementPage';
 import AddressPage from '../../pages/AddressPage';
-import SubscriptionPage from '../../pages/SubscriptionPage';
 import PaymentPage from '../../pages/PayInfor';
-import KakaoCallbackPage from '../../api/auth/kakao/KakaoCallbackPage';
+import KakaoCallbackPage from '../../api/auth/callback/success';
+import RegisterPage from '../../pages/RegisterPage';
+import LoginSuccessPage from '../../pages/LoginSuccessPage';
+import ProfileComponent from '../../pages/Mypage.Profile/index';
+import MyFamilyPageComponent from '../../pages/Mypage.Myfamily/index';
+import SubscriptionPageComponent from '../../pages/Mypage.Subscribe/index';
+import SubscriptionPage from '../../pages/Pay.SubscriptionPage';
+import FamilyCreationNamePage from '../../pages/FamilyCreation.makenamePage';
+import FamilyCreationCompletePage from '../../pages/FamilyCreation.Sucess';
 
 const router = createBrowserRouter([
     // 카카오 콜백은 Layout 밖에서 처리
-    {
-        path: '/kakao/callback',
-        element: React.createElement(KakaoCallbackPage),
-    },
     // 로그인 페이지도 Layout 밖에서 처리
     {
         path: '/login',
         element: React.createElement(LoginPage),
+    },
+    {
+        path: '/register',
+        element: React.createElement(RegisterPage),
+    },
+    {
+        path: '/login/success',
+        element: React.createElement(LoginSuccessPage),
+    },
+    {
+        path: '/auth/callback/success',
+        element: React.createElement(KakaoCallbackPage),
     },
     {
         path: '/',
@@ -76,12 +91,6 @@ const router = createBrowserRouter([
                 }),
             },
             {
-                path: 'subscription/:groupId',
-                element: React.createElement(ProtectedRoute, {
-                    children: React.createElement(SubscriptionPage),
-                }),
-            },
-            {
                 path: 'payment/:subscriptionId',
                 element: React.createElement(ProtectedRoute, {
                     children: React.createElement(PaymentPage),
@@ -93,6 +102,55 @@ const router = createBrowserRouter([
                     children: React.createElement(ApiTestPage),
                 }),
             },
+            {
+                path: 'mypage/profile',
+                element: React.createElement(ProtectedRoute, { 
+                    children: React.createElement(ProfileComponent),
+                }),
+            },
+            {
+                path: 'mypage/family',
+                element: React.createElement(ProtectedRoute, { 
+                    children: React.createElement(MyFamilyPageComponent),
+                }),
+            },
+            {
+                path: 'mypage/subscription',
+                element: React.createElement(ProtectedRoute, { 
+                    children: React.createElement(SubscriptionPageComponent),
+                }),
+            },
+            {
+                path: 'subscription/:groupId',
+                element: React.createElement(ProtectedRoute, { 
+                    children: React.createElement(SubscriptionPage),
+                }),
+            },
+            {
+                path: 'payment/:groupId',
+                element: React.createElement(ProtectedRoute, { 
+                    children: React.createElement(PaymentPage),
+                }),
+            },
+            {
+                path: 'family/create-name',
+                element: React.createElement(ProtectedRoute, { 
+                children: React.createElement(FamilyCreationNamePage),
+            }),
+            },
+            {
+                path: 'family/create-address/:groupId',
+                element: React.createElement(ProtectedRoute, { 
+                children: React.createElement(AddressPage),
+            }),
+            },
+            {
+                path: 'family/create-complete/:groupId',
+                element: React.createElement(ProtectedRoute, { 
+                children: React.createElement(FamilyCreationCompletePage),
+            }),
+            },
+            
         ],
     },
 ]);

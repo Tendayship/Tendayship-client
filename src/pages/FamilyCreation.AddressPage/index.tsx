@@ -1,12 +1,13 @@
-// 파일명: src/pages/AddressPage/index.tsx
+// 파일명: src/pages/AddressPage/index.tsx (수정 완료)
 
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import DaumPostcode from 'react-daum-postcode';
-import Header from '../../shared/ui/Header.js';
-import ProgressIndicator from '../../widgets/ProgressIndicator/index.js';
-import { registerRecipient } from '../../api/familyApi.js';
-import type { RecipientPayload } from '../../api/familyApi.js';
+// [수정] .js 확장자 제거
+import Header from '../../shared/ui/Header';
+import ProgressIndicator from '../../widgets/ProgressIndicator';
+import { registerRecipient } from '../../api/familyApi';
+import type { RecipientPayload } from '../../api/familyApi';
 
 interface DaumPostcodeData {
     address: string;
@@ -55,7 +56,8 @@ const AddressPage = () => {
         setAddressInfo((prev) => ({
             ...prev,
             postcode: data.zonecode,
-            detailAddress: fullAddress,
+            // 우편번호 검색 후 상세주소 입력 필드는 비워주는 것이 사용자 경험에 더 좋습니다.
+            detailAddress: fullAddress, 
         }));
 
         setIsPostcodeModalOpen(false);
@@ -90,11 +92,14 @@ const AddressPage = () => {
         }
     };
 
+    // ▼▼▼ [수정] stepData 형식 변경 ▼▼▼
     const stepData = [
-        { number: 1, isCompleted: true },
-        { number: 2, isActive: true },
-        { number: 3, isCompleted: false },
+        // ProgressIndicator가 요구하는 형식에 맞게 isActive와 bgColor를 명시합니다.
+        { number: 1, isActive: true, bgColor: '#709ECD' }, // 완료된 단계
+        { number: 2, isActive: true, bgColor: '#709ECD' }, // 현재 활성 단계
+        { number: 3, isActive: false, bgColor: '#D1D5DB' },// 비활성 단계 (tailwindcss gray-300)
     ];
+    // ▲▲▲ [수정] stepData 형식 변경 ▲▲▲
 
     return (
         <>
@@ -127,7 +132,7 @@ const AddressPage = () => {
                                 </div>
                             </div>
 
-                            {/* 상세 주소 */}
+                            {/* 주소 */}
                             <div className="w-full text-left">
                                 <label htmlFor="detailAddress" className="mb-1 block text-sm font-medium text-gray-700">주소</label>
                                 <input id="detailAddress" type="text" value={addressInfo.detailAddress} onChange={handleInputChange} className="h-12 w-full rounded-md border border-gray-300 px-4" placeholder="상세 주소를 입력하세요" />

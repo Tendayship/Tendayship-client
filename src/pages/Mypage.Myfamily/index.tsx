@@ -29,7 +29,7 @@ const relationshipMap: { [key: string]: string } = {
     LEADER: "리더"
 };
 
-export const MyFamilyPageComponent = (): JSX.Element => {
+const MyFamilyPageComponent = (): JSX.Element => {
     const navigate = useNavigate();
     const [recipient, setRecipient] = useState<RecipientData | null>(null);
     const [members, setMembers] = useState<FamilyMember[]>([]);
@@ -175,3 +175,4 @@ export const MyFamilyPageComponent = (): JSX.Element => {
         </div>
     );
 };
+export default MyFamilyPageComponent;

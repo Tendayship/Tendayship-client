@@ -13,7 +13,7 @@ const LoginSuccessPage = () => {
     // 2초 후에 메인 페이지로 이동하는 타이머 설정
     const timer = setTimeout(() => {
       navigate('/'); // 메인 페이지 경로로 이동
-    }, 2000); // 2000ms = 2초
+    }, 3000); // 2000ms = 2초
 
     // 컴포넌트가 언마운트될 때 타이머를 정리합니다.
     return () => clearTimeout(timer);

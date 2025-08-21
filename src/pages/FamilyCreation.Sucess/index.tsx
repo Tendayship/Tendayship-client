@@ -5,8 +5,20 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getGroupDetails } from '../../api/familyApi';
 import icon from '../../assets/Copy.svg';
 import image from '../../assets/Share.svg';
-import Header from '../../shared/ui/Header';
+// import Header from '../../shared/ui/Header';
 import ProgressIndicator from '../../widgets/ProgressIndicator';
+
+interface Step {
+    number: number;
+    isActive: boolean;
+    bgColor: string;
+}
+
+const stepData: Step[] = [
+    { number: 1, isActive: false, bgColor: "bg-green-600" }, // 완료된 단계
+    { number: 2, isActive: false, bgColor: "bg-green-600" }, // 완료된 단계
+    { number: 3, isActive: true, bgColor: "bg-green-600" },  // 현재 활성화된 단계
+];
 
 const FamilyCreationCompletePage = () => {
     const navigate = useNavigate();
@@ -51,15 +63,9 @@ const FamilyCreationCompletePage = () => {
         navigate('/my-group'); // 최종 목적지 경로
     };
 
-    const stepData = [
-        { number: 1, isCompleted: true },
-        { number: 2, isCompleted: true },
-        { number: 3, isActive: true },
-    ];
-
     return (
         <div className="flex min-h-screen flex-col bg-[#f1f1f1]">
-            <Header />
+            {/* <Header /> */}
             <div className="mt-20 flex flex-col items-center">
                 <ProgressIndicator stepData={stepData} />
                 <main className="mt-10 w-[500px] rounded-lg bg-white p-10 text-center shadow-lg">

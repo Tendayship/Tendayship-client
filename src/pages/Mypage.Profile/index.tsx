@@ -19,7 +19,7 @@ import calendarIcon from "../../assets/vector.svg";
 import logo from "../../assets/erdream.png";
 import navBg from "../../assets/erdream.png";
 
-export const ProfileComponent = (): JSX.Element => {
+const ProfileComponent = (): JSX.Element => {
   const navigate = useNavigate();
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -212,3 +212,4 @@ export const ProfileComponent = (): JSX.Element => {
     </div>
   );
 };
+export default ProfileComponent;

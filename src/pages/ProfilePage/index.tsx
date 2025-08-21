@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../../shared/ui/Header';
+// import Header from '../../shared/ui/Header';
 import { updateProfile, uploadProfileImage } from '../../api/userApi';
 
 // UserProfilePayload 타입 정의가 파일에 없어서 추가했습니다.
@@ -138,7 +138,7 @@ const ProfilePage = () => {
 
     return (
         <div className="flex min-h-screen flex-col bg-[#F1F1F1]">
-            <Header />
+            {/* <Header /> */}
             <main className="flex flex-grow items-center justify-center p-4">
                 <div className="h-auto w-[500px] rounded-[15px] bg-[#FFF] p-[50px] text-center shadow-lg">
                     <h1 className="mt-[-10px] mb-[20px] text-[32px] font-bold text-[#000]">

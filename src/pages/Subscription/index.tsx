@@ -29,13 +29,20 @@ const SubscriptionPage = () => {
                 deliveryDate: selectedDate,
             });
             // const subscription = await undefined;
-
-            alert(
-                `구독 신청이 완료되었습니다. 다음 결제일은 ${subscription.nextPaymentDate} 입니다.`
-            );
-
-            // ◀️ 성공 시, 해당 구독에 대한 결제 페이지로 이동
-            navigate(`/payment/${subscription.subscriptionId}`);
+            
+            // ◀️ API 응답이 유효한지 확인하여 안정성 강화
+            if (subscription && subscription.subscriptionId && subscription.nextPaymentDate) {
+                alert(
+                    `구독 신청이 완료되었습니다. 다음 결제일은 ${subscription.nextPaymentDate} 입니다.`
+                );
+    
+                // ◀️ 성공 시, 해당 구독에 대한 결제 페이지로 이동
+                navigate(`/payment/${subscription.subscriptionId}`);
+            } else {
+                // ◀️ API가 성공적으로 호출되었지만 예상치 못한 응답을 반환한 경우
+                console.error('구독 생성 후 유효하지 않은 응답:', subscription);
+                alert('구독 처리 중 예기치 않은 오류가 발생했습니다. 다시 시도해 주세요.');
+            }
         } catch (error) {
             console.error('구독 생성 실패:', error);
             alert('구독 처리 중 오류가 발생했습니다.');
