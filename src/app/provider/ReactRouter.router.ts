@@ -19,12 +19,12 @@ import PaymentPage from '../../pages/PayInfor';
 import KakaoCallbackPage from '../../api/auth/callback/success';
 import RegisterPage from '../../pages/RegisterPage';
 import LoginSuccessPage from '../../pages/LoginSuccessPage';
+import LoginFailPage from '../../pages/Login.fail';
 import ProfileComponent from '../../pages/Mypage.Profile/index';
 import MyFamilyPageComponent from '../../pages/Mypage.Myfamily/index';
 import SubscriptionPageComponent from '../../pages/Mypage.Subscribe/index';
 import SubscriptionPage from '../../pages/Pay.SubscriptionPage';
 import FamilyCreationNamePage from '../../pages/FamilyCreation.makenamePage';
-import FamilyCreationCompletePage from '../../pages/FamilyCreation.Sucess';
 
 const router = createBrowserRouter([
     // 카카오 콜백은 Layout 밖에서 처리
@@ -40,6 +40,10 @@ const router = createBrowserRouter([
     {
         path: '/login/success',
         element: React.createElement(LoginSuccessPage),
+    },
+    {
+        path: '/login/fail',
+        element: React.createElement(LoginFailPage),
     },
     {
         path: '/auth/callback/success',
@@ -142,12 +146,6 @@ const router = createBrowserRouter([
                 path: 'family/create-address/:groupId',
                 element: React.createElement(ProtectedRoute, { 
                 children: React.createElement(AddressPage),
-            }),
-            },
-            {
-                path: 'family/create-complete/:groupId',
-                element: React.createElement(ProtectedRoute, { 
-                children: React.createElement(FamilyCreationCompletePage),
             }),
             },
             

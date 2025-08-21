@@ -70,7 +70,7 @@ const FamilyCreationCompletePage = () => {
                 <ProgressIndicator stepData={stepData} />
                 <main className="mt-10 w-[500px] rounded-lg bg-white p-10 text-center shadow-lg">
                     <h1 className="text-2xl font-semibold">
-                        가족 그룹 생성이 완료 되었습니다!
+                        가족 그룹 생성 완료
                     </h1>
                     <p className="mt-4 text-gray-600">
                         이어드림에 오신 여러분을 환영합니다
@@ -78,8 +78,7 @@ const FamilyCreationCompletePage = () => {
 
                     <section className="mt-10">
                         <p className="text-lg">
-                            <span className="font-medium">가족 코드</span>를 공유해
-                            가족들을 초대하세요.
+                            <span className="font-medium">귀하의 가족 코드는 </span>
                         </p>
                         <div className="mt-4 flex items-center justify-between rounded-md bg-[#f1f1f1] p-3">
                             <span className="text-xl font-medium tracking-widest">{inviteCode}</span>
@@ -96,7 +95,7 @@ const FamilyCreationCompletePage = () => {
 
                     <button
                         onClick={handleConfirm}
-                        className="mt-8 h-12 w-full rounded-lg bg-green-600 font-semibold text-white transition-colors hover:bg-green-700"
+                        className="mt-8 h-12 w-full rounded-lg bg-[#018941] font-semibold text-white transition-colors hover:bg-[#018941]"
                     >
                         확인
                     </button>

@@ -165,7 +165,7 @@ const ProfilePage = () => {
                                     }
                                 />
                             </button>
-                            <div className="absolute -bottom-7 w-full text-center text-[14px] font-medium text-black">
+                            <div className="absolute -bottom-7 w-full text-center text-[18px] font-medium text-black">
                                 프로필 사진
                             </div>
                             <input
@@ -265,7 +265,7 @@ const ProfilePage = () => {
                             disabled={isLoading}
                         >
                             <span className="font-Pretandard text-[20px]">
-                                {isLoading ? '등록 중...' : '다음'}
+                                {isLoading ? '등록 중...' : '등록'}
                             </span>
                         </button>
                     </form>
