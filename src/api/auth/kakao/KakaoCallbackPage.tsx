@@ -127,7 +127,7 @@ const KakaoCallbackPage = () => {
           setTimeout(() => {
             try {
               window.close();
-            } catch (e) {
+            } catch {
               console.log('Could not close popup automatically');
               setMessage(errorMessage + ' 이 창을 닫아주세요.');
             }
