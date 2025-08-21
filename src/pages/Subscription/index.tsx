@@ -1,12 +1,18 @@
 // src/pages/SubscriptionPage/index.tsx (연결 및 개선 완료)
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createSubscription } from '../../api/familyApi';
+import { createSubscription } from '../../api/subscriptionApi';
+
+// 수령일 옵션을 enum으로 정의하여 타입 안정성 및 가독성 향상
+enum DeliveryDate {
+    SecondSunday = 'SECOND_SUNDAY',
+    FourthSunday = 'FOURTH_SUNDAY',
+}
 
 const SubscriptionPage = () => {
     const navigate = useNavigate();
     const { groupId } = useParams<{ groupId: string }>();
-    const [selectedDate, setSelectedDate] = useState<string | null>(null);
+    const [selectedDate, setSelectedDate] = useState<DeliveryDate | null>(null);
     const [isSubscribing, setIsSubscribing] = useState<boolean>(false);
 
     // '정기 구독 시작하기' 버튼 클릭 핸들러
@@ -58,11 +64,11 @@ const SubscriptionPage = () => {
                     {/* 둘째 주 버튼: HTML 디자인 적용 */}
                     <button
                         className={`h-[48px] w-[180px] rounded-[5px] text-lg font-semibold transition-colors
-                            ${selectedDate === 'SECOND_SUNDAY'
+                            ${selectedDate === DeliveryDate.SecondSunday
                                 ? 'bg-[#018941] text-white'
                                 : 'bg-[#FFFFFF] text-[#018941] border border-[#018941] hover:bg-[#018941] hover:text-[#FFFFFF]'
                             }`}
-                        onClick={() => setSelectedDate('SECOND_SUNDAY')}
+                        onClick={() => setSelectedDate(DeliveryDate.SecondSunday)}
                         disabled={isSubscribing}
                     >
                         매월 둘째 주
@@ -70,11 +76,11 @@ const SubscriptionPage = () => {
                     {/* 넷째 주 버튼: HTML 디자인 적용 */}
                     <button
                         className={`h-[48px] w-[180px] rounded-[5px] text-lg font-semibold transition-colors
-                            ${selectedDate === 'FOURTH_SUNDAY'
+                            ${selectedDate === DeliveryDate.FourthSunday
                                 ? 'bg-[#018941] text-white'
                                 : 'bg-[#FFFFFF] text-[#018941] border border-[#018941] hover:bg-[#018941] hover:text-[#FFFFFF]'
                             }`}
-                        onClick={() => setSelectedDate('FOURTH_SUNDAY')}
+                        onClick={() => setSelectedDate(DeliveryDate.FourthSunday)}
                         disabled={isSubscribing}
                     >
                         매월 넷째 주

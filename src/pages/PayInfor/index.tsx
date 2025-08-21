@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const subscriptionInfo = {
     product: '구독상품',
@@ -12,9 +13,9 @@ const paymentInfo = {
 };
 
 const PaymentPage = () => {
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
-        'general' | 'kakao'
-    >('general');
+    const navigate = useNavigate();
+
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'general' | 'kakao'>('general');
     const [agreements, setAgreements] = useState({
         all: false,
         required: false,
@@ -31,8 +32,7 @@ const PaymentPage = () => {
             });
         } else {
             const newAgreements = { ...agreements, [type]: !agreements[type] };
-            newAgreements.all =
-                newAgreements.required && newAgreements.optional;
+            newAgreements.all = newAgreements.required && newAgreements.optional;
             setAgreements(newAgreements);
         }
     };
@@ -41,16 +41,35 @@ const PaymentPage = () => {
         setSelectedPaymentMethod(method);
     };
 
-    const handlePayment = () => {
+    const handlePayment = async () => {
         if (!agreements.required) {
             alert('필수 약관에 동의해주세요.');
             return;
         }
-        // 실제 결제 로직: selectedPaymentMethod에 따라 일반 결제 또는 카카오페이 로직 호출
-        console.log(
-            `Processing payment with ${selectedPaymentMethod} method...`
-        );
-        // 성공 시 다른 페이지로 이동 등
+
+        if (selectedPaymentMethod === 'kakao') {
+            try {
+                const response = await fetch('/api/subscription/payment/ready', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        product: subscriptionInfo.product,
+                        price: paymentInfo.totalAmount,
+                    }),
+                });
+                const data = await response.json();
+
+                // 카카오페이 페이지로 이동
+                window.location.href = data.next_redirect_pc_url;
+            } catch (err) {
+                console.error(err);
+                alert('결제 준비 중 오류가 발생했습니다.');
+            }
+            return;
+        }
+
+        // 일반 결제 처리
+        console.log(`Processing payment with ${selectedPaymentMethod} method...`);
     };
 
     return (
