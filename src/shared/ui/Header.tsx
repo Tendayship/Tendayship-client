@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [devBypassAuth, setDevBypassAuth] = useState(false);
+    const location = useLocation();
 
     useEffect(() => {
         // 컴포넌트 마운트 시 localStorage에서 상태 읽기
@@ -43,96 +44,141 @@ const Header = () => {
     ];
 
     return (
-        <header className="relative flex h-[60px] w-full items-center border-b border-[#C2C2C2] bg-[#FFFFFF33] px-[64px]">
-            {/* 로고 */}
-            <Link to="/" className="mx-auto">
-                <img
-                    src="/yeo-dream-logo.png"
-                    alt="이어드림 로고"
-                    className="h-[89px] w-[252px] transition-opacity hover:opacity-80"
-                />
-            </Link>
+        <>
+            <header className="relative flex h-[60px] w-full items-center border-b border-[#C2C2C2] bg-[#FFFFFF33] px-[64px]">
+                {/* 로고 */}
+                <Link to="/" className="mx-auto">
+                    <img
+                        src="/yeo-dream-logo.png"
+                        alt="이어드림 로고"
+                        className="h-12 w-auto transition-opacity hover:opacity-80"
+                    />
+                </Link>
 
-            {/* 우측 메뉴 아이콘 */}
-            <div className="absolute right-[64px] flex items-center space-x-[48px]">
-                {/* 네비게이션 메뉴 버튼 */}
-                <div className="relative">
-                    <button
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                {/* 우측 메뉴 아이콘 */}
+                <div className="absolute right-[64px] flex items-center space-x-[48px]">
+                    {/* 네비게이션 메뉴 버튼 */}
+                    <div className="relative">
+                        <button
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            className="text-gray-600 hover:text-gray-800 focus:outline-none"
+                        >
+                            <img
+                                src="/3lineslogo.svg"
+                                alt="메뉴"
+                                className="h-[28px] w-[28px]"
+                            />
+                        </button>
+
+                        {/* 드롭다운 메뉴 */}
+                        {isMenuOpen && (
+                            <div className="absolute top-full right-0 z-50 mt-2 w-64 rounded-lg border border-gray-200 bg-white shadow-lg">
+                                <div className="p-2">
+                                    <div className="mb-2 border-b pb-2 text-center text-sm font-semibold text-gray-700">
+                                        개발용 네비게이션
+                                    </div>
+                                    {navigationLinks.map((link) => (
+                                        <Link
+                                            key={link.path}
+                                            to={link.path}
+                                            onClick={() => setIsMenuOpen(false)}
+                                            className="block rounded px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    ))}
+
+                                    {/* 개발자 도구 섹션 */}
+                                    <div className="mt-2 border-t pt-2">
+                                        <div className="mb-2 text-center text-xs font-medium text-gray-500">
+                                            🛠️ 개발자 도구
+                                        </div>
+                                        <button
+                                            onClick={toggleDevBypass}
+                                            className={`w-full rounded px-3 py-2 text-sm font-medium transition-colors ${
+                                                devBypassAuth
+                                                    ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
+                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            }`}
+                                        >
+                                            {devBypassAuth
+                                                ? '🔓 로그인 우회 ON'
+                                                : '🔒 로그인 우회 OFF'}
+                                        </button>
+                                        {devBypassAuth && (
+                                            <div className="mt-1 px-3 py-1 text-xs text-yellow-600">
+                                                ⚠️ 모든 보호된 페이지에 접근
+                                                가능
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    <a
+                        href="#"
                         className="text-gray-600 hover:text-gray-800 focus:outline-none"
                     >
                         <img
-                            src="/3lineslogo.svg"
-                            alt="메뉴"
+                            src="/humanlogo.svg"
+                            alt="마이페이지"
                             className="h-[28px] w-[28px]"
                         />
-                    </button>
-
-                    {/* 드롭다운 메뉴 */}
-                    {isMenuOpen && (
-                        <div className="absolute top-full right-0 z-50 mt-2 w-64 rounded-lg border border-gray-200 bg-white shadow-lg">
-                            <div className="p-2">
-                                <div className="mb-2 border-b pb-2 text-center text-sm font-semibold text-gray-700">
-                                    개발용 네비게이션
-                                </div>
-                                {navigationLinks.map((link) => (
-                                    <Link
-                                        key={link.path}
-                                        to={link.path}
-                                        onClick={() => setIsMenuOpen(false)}
-                                        className="block rounded px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    >
-                                        {link.label}
-                                    </Link>
-                                ))}
-
-                                {/* 개발자 도구 섹션 */}
-                                <div className="mt-2 border-t pt-2">
-                                    <div className="mb-2 text-center text-xs font-medium text-gray-500">
-                                        🛠️ 개발자 도구
-                                    </div>
-                                    <button
-                                        onClick={toggleDevBypass}
-                                        className={`w-full rounded px-3 py-2 text-sm font-medium transition-colors ${
-                                            devBypassAuth
-                                                ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
-                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                        }`}
-                                    >
-                                        {devBypassAuth
-                                            ? '🔓 로그인 우회 ON'
-                                            : '🔒 로그인 우회 OFF'}
-                                    </button>
-                                    {devBypassAuth && (
-                                        <div className="mt-1 px-3 py-1 text-xs text-yellow-600">
-                                            ⚠️ 모든 보호된 페이지에 접근 가능
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    </a>
                 </div>
-                <a
-                    href="#"
-                    className="text-gray-600 hover:text-gray-800 focus:outline-none"
-                >
-                    <img
-                        src="/humanlogo.svg"
-                        alt="마이페이지"
-                        className="h-[28px] w-[28px]"
-                    />
-                </a>
-            </div>
 
-            {/* 메뉴가 열렸을 때 배경 클릭으로 닫기 */}
-            {isMenuOpen && (
-                <div
-                    className="fixed inset-0 z-40"
-                    onClick={() => setIsMenuOpen(false)}
-                />
-            )}
-        </header>
+                {/* 메뉴가 열렸을 때 배경 클릭으로 닫기 */}
+                {isMenuOpen && (
+                    <div
+                        className="fixed inset-0 z-40"
+                        onClick={() => setIsMenuOpen(false)}
+                    />
+                )}
+            </header>
+            <div className="flex h-[45px] justify-center gap-[100px] bg-gradient-to-r from-[#00652F] to-[#C7C678] text-white">
+                <Link
+                    to="/"
+                    className={`flex items-center border-b-2 px-4 py-2 transition-all hover:opacity-80 ${
+                        location.pathname === '/'
+                            ? 'border-white font-semibold'
+                            : 'border-transparent'
+                    }`}
+                >
+                    홈
+                </Link>
+                <Link
+                    to="/news-feed"
+                    className={`flex items-center border-b-2 px-4 py-2 transition-all hover:opacity-80 ${
+                        location.pathname === '/news-feed'
+                            ? 'border-white font-semibold'
+                            : 'border-transparent'
+                    }`}
+                >
+                    소식피드
+                </Link>
+                <Link
+                    to="/news-inbox"
+                    className={`flex items-center border-b-2 px-4 py-2 transition-all hover:opacity-80 ${
+                        location.pathname === '/news-inbox'
+                            ? 'border-white font-semibold'
+                            : 'border-transparent'
+                    }`}
+                >
+                    소식함
+                </Link>
+                <Link
+                    to="/profile"
+                    className={`flex items-center border-b-2 px-4 py-2 transition-all hover:opacity-80 ${
+                        location.pathname === '/profile'
+                            ? 'border-white font-semibold'
+                            : 'border-transparent'
+                    }`}
+                >
+                    마이페이지
+                </Link>
+            </div>
+        </>
     );
 };
 
