@@ -1,81 +1,101 @@
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
-import axios from 'axios';
+import axiosInstance from '../shared/api/axiosInstance';
 import { AuthContext, type User } from './AuthContext';
 
 interface AuthProviderProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
-    useEffect(() => {
-        checkAuthStatus();
-    }, []);
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
 
-    const checkAuthStatus = async () => {
-        const token = localStorage.getItem('access_token');
-        if (!token) {
-            setIsLoading(false);
-            return;
+  const checkAuthStatus = async () => {
+    try {
+      console.log('Checking authentication status...');
+      
+      // First, verify the authentication
+      const verifyResponse = await axiosInstance.get('/auth/verify');
+      console.log('Auth verification successful:', verifyResponse.data);
+      
+      // Then, get user information
+      const userResponse = await axiosInstance.get('/auth/me');
+      console.log('User data retrieved:', userResponse.data);
+      
+      setIsAuthenticated(true);
+      setUser(userResponse.data);
+    } catch (unknownError) {
+      // 타입 가드를 사용한 안전한 에러 처리
+      function isAxiosError(error: unknown): error is { response?: { status?: number } } {
+        return (
+          typeof error === 'object' &&
+          error !== null &&
+          'response' in error &&
+          typeof (error as { response?: unknown }).response === 'object'
+        );
+      }
+
+      if (isAxiosError(unknownError)) {
+        const status = unknownError.response?.status;
+        if (status === 401) {
+          console.log('미로그인 상태 - 정상');
+        } else {
+          console.error('인증 확인 중 오류 (Status: ' + status + '):', unknownError);
         }
+      } else {
+        console.error('알 수 없는 인증 오류:', unknownError);
+      }
+      
+      setIsAuthenticated(false);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-        try {
-            // 토큰 검증
-            await axios.get('/api/auth/verify', {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+  const login = async () => {
+    // 쿠키 기반 인증이므로 토큰 매개변수 제거
+    // 서버에서 이미 쿠키를 설정했으므로 상태만 업데이트
+    await checkAuthStatus();
+  };
 
-            // 사용자 정보 가져오기
-            const userResponse = await axios.get<User>('/api/auth/me', {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+  const logout = async () => {
+    try {
+      // 서버에 로그아웃 요청하여 쿠키 무효화 - axiosInstance 사용
+      await axiosInstance.post('/auth/logout', {});
+    } catch (unknownError) {
+      // 타입 가드를 사용한 안전한 에러 처리
+      console.error('로그아웃 요청 실패:', unknownError);
+    } finally {
+      // 클라이언트 상태 초기화
+      setIsAuthenticated(false);
+      setUser(null);
+      window.location.href = '/login';
+    }
+  };
 
-            setIsAuthenticated(true);
-            setUser(userResponse.data);
-        } catch (error) {
-            console.error('인증 실패:', error);
-            localStorage.removeItem('access_token');
-            setIsAuthenticated(false);
-            setUser(null);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+  const refreshAuth = async () => {
+    await checkAuthStatus();
+  };
 
-    const login = (token: string) => {
-        localStorage.setItem('access_token', token);
-        setIsAuthenticated(true);
-        // 토큰 설정 후 사용자 정보 다시 조회
-        checkAuthStatus();
-    };
-
-    const logout = () => {
-        localStorage.removeItem('access_token');
-        setIsAuthenticated(false);
-        setUser(null);
-        window.location.href = '/login';
-    };
-
-    const refreshAuth = async () => {
-        await checkAuthStatus();
-    };
-
-    return (
-        <AuthContext.Provider
-            value={{
-                isAuthenticated,
-                isLoading,
-                user,
-                login,
-                logout,
-                refreshAuth,
-            }}
-        >
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider 
+      value={{ 
+        isAuthenticated, 
+        isLoading, 
+        user, 
+        login, 
+        logout, 
+        refreshAuth 
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
