@@ -26,61 +26,63 @@ export default function MainPage() {
 
             {/* 주요 기능 카드들 */}
             <section className="px-6 py-12">
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    {/* 가족 그룹 관리 */}
-                    <Link
-                        to="/family/create"
-                        className="block rounded-lg bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
-                    >
-                        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
-                            <svg
-                                className="h-6 w-6 text-blue-600"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                                />
-                            </svg>
-                        </div>
-                        <h3 className="mb-2 text-lg font-semibold text-gray-900">
-                            가족 그룹
-                        </h3>
-                        <p className="text-gray-600">
-                            새로운 가족 그룹을 만들어 멤버들을 초대하세요.
-                        </p>
-                    </Link>
+                <div className="mx-auto max-w-7xl">
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        {/* 가족 그룹 관리 */}
+                        <Link
+                            to="/family/create"
+                            className="block rounded-lg bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+                        >
+                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
+                                <svg
+                                    className="h-6 w-6 text-blue-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                                    />
+                                </svg>
+                            </div>
+                            <h3 className="mb-2 text-lg font-semibold text-gray-900">
+                                가족 그룹
+                            </h3>
+                            <p className="text-gray-600">
+                                새로운 가족 그룹을 만들어 멤버들을 초대하세요.
+                            </p>
+                        </Link>
 
-                    {/* 소식 작성 */}
-                    <div className="rounded-lg bg-white p-6 shadow-sm">
-                        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
-                            <svg
-                                className="h-6 w-6 text-green-600"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                                />
-                            </svg>
+                        {/* 소식 작성 */}
+                        <div className="rounded-lg bg-white p-6 shadow-sm">
+                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
+                                <svg
+                                    className="h-6 w-6 text-green-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                                    />
+                                </svg>
+                            </div>
+                            <h3 className="mb-2 text-lg font-semibold text-gray-900">
+                                소식 작성
+                            </h3>
+                            <p className="text-gray-600">
+                                오늘의 이야기를 가족들과 공유해보세요.
+                            </p>
                         </div>
-                        <h3 className="mb-2 text-lg font-semibold text-gray-900">
-                            소식 작성
-                        </h3>
-                        <p className="text-gray-600">
-                            오늘의 이야기를 가족들과 공유해보세요.
-                        </p>
                     </div>
 
-                    <div className="grid gap-8 md:grid-cols-3">
+                    <div className="mt-16 grid gap-8 md:grid-cols-3">
                         {/* Feature 1 */}
                         <div className="group text-center">
                             <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-green-600 text-white shadow-lg transition-transform group-hover:scale-110">

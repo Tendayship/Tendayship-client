@@ -1,5 +1,36 @@
 @import 'tailwindcss';
 
+/* Pretendard Variable CDN */
+@font-face {
+    font-family: 'Pretendard Variable';
+    src:
+        url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/woff2/PretendardVariable.woff2')
+            format('woff2-variations'),
+        url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/woff/PretendardVariable.woff')
+            format('woff');
+    font-weight: 45 920;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* 기본 폰트를 Pretendard로 설정 */
+:root {
+    font-family:
+        'Pretendard Variable',
+        'Pretendard',
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        'Noto Sans KR',
+        'Apple SD Gothic Neo',
+        'Malgun Gothic',
+        'Helvetica Neue',
+        Arial,
+        sans-serif;
+}
+
 @font-face {
     font-family: 'KyoboHandwriting2020A';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2112@1.0/KyoboHandwriting2020A.woff')
