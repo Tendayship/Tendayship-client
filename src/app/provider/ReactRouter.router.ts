@@ -34,6 +34,14 @@ import BooksPage from '../../pages/BooksPage';
 import FamilyGroupSetupPage from '../../pages/FamilyGroupSetupPage';
 import PaymentPageNew from '../../pages/PaymentPage';
 
+// Admin page imports
+import AdminRoute from '../../components/admin/AdminRoute';
+import AdminDashboard from '../../pages/admin/AdminDashboard';
+import AdminGroups from '../../pages/admin/AdminGroups';
+import AdminBooks from '../../pages/admin/AdminBooks';
+import AdminMembers from '../../pages/admin/AdminMembers';
+import GroupFeed from '../../pages/admin/GroupFeed';
+
 const router = createBrowserRouter([
     // 카카오 콜백, 백엔드 리다이렉트 경로는 Layout 밖에서 처리
     {
@@ -204,6 +212,37 @@ const router = createBrowserRouter([
             {
                 path: 'auth-test',
                 element: React.createElement(AuthTest),
+            },
+            // --- 관리자 페이지 ---
+            {
+                path: 'admin',
+                element: React.createElement(AdminRoute, {
+                    children: React.createElement(AdminDashboard),
+                }),
+            },
+            {
+                path: 'admin/groups',
+                element: React.createElement(AdminRoute, {
+                    children: React.createElement(AdminGroups),
+                }),
+            },
+            {
+                path: 'admin/groups/:groupId/feed',
+                element: React.createElement(AdminRoute, {
+                    children: React.createElement(GroupFeed),
+                }),
+            },
+            {
+                path: 'admin/books',
+                element: React.createElement(AdminRoute, {
+                    children: React.createElement(AdminBooks),
+                }),
+            },
+            {
+                path: 'admin/members',
+                element: React.createElement(AdminRoute, {
+                    children: React.createElement(AdminMembers),
+                }),
             },
         ],
     },
