@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+  const [isNewUser, setIsNewUser] = useState(false);
 
   useEffect(() => {
     checkAuthStatus();
@@ -30,6 +31,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       
       setIsAuthenticated(true);
       setUser(userResponse.data);
+      
+      // Determine if user is new (missing required profile info)
+      const userData = userResponse.data;
+      const newUser = !userData.name || !userData.phone;
+      setIsNewUser(newUser);
     } catch (unknownError) {
       // 타입 가드를 사용한 안전한 에러 처리
       function isAxiosError(error: unknown): error is { response?: { status?: number } } {
@@ -54,6 +60,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       
       setIsAuthenticated(false);
       setUser(null);
+      setIsNewUser(false);
     } finally {
       setIsLoading(false);
     }
@@ -76,6 +83,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // 클라이언트 상태 초기화
       setIsAuthenticated(false);
       setUser(null);
+      setIsNewUser(false);
       window.location.href = '/login';
     }
   };
@@ -92,7 +100,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         user, 
         login, 
         logout, 
-        refreshAuth 
+        refreshAuth,
+        isNewUser
       }}
     >
       {children}

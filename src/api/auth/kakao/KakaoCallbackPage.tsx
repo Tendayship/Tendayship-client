@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../contexts';
 import axiosInstance from '../../../shared/api/axiosInstance';
+import { ensureSafePath, getStoredReturnUrl, storeReturnUrl } from '../../../shared/utils/pathUtils';
 
 const KakaoCallbackPage = () => {
     const navigate = useNavigate();
@@ -21,14 +22,29 @@ const KakaoCallbackPage = () => {
                 setStatus('processing');
                 setMessage('로그인 정보를 확인하고 있습니다...');
 
-                // URL에서 실패 상태 확인
+                // URL에서 state와 실패 상태 확인
                 const params = new URLSearchParams(location.search);
                 const reason = params.get('reason');
+                const stateParam = params.get('state');
 
                 // 실패 콜백 경로인지 확인
                 if (location.pathname === '/auth/callback/fail') {
                     console.error('카카오 로그인 실패:', reason);
+                    
+                    // 실패 시에도 returnUrl을 유지하여 재로그인시 같은 경로로 복귀
+                    if (stateParam) {
+                        const decodedReturnUrl = decodeURIComponent(stateParam);
+                        storeReturnUrl(decodedReturnUrl);
+                    }
+                    
                     throw new Error(reason || '로그인에 실패했습니다.');
+                }
+
+                // Store state parameter as returnUrl if present
+                if (stateParam) {
+                    const decodedReturnUrl = decodeURIComponent(stateParam);
+                    console.log('State parameter found:', decodedReturnUrl);
+                    storeReturnUrl(decodedReturnUrl);
                 }
 
                 console.log('=== 카카오 콜백 디버깅 ===');
@@ -112,17 +128,23 @@ const KakaoCallbackPage = () => {
                 await login();
 
                 // 신규 사용자 판단 로직
-                const isNewUser = !userRes.data.name || !userRes.data.phone;
+                const userIsNew = !userRes.data.name || !userRes.data.phone;
+                
+                // Get returnUrl from state or stored session
+                const storedReturnUrl = getStoredReturnUrl();
+                const targetUrl = ensureSafePath(storedReturnUrl);
 
                 setStatus('success');
                 setMessage('로그인이 완료되었습니다. 페이지를 이동합니다...');
 
-                // 페이지 이동
+                console.log('Navigation decision:', { userIsNew, targetUrl });
+
+                // 페이지 이동 - 신규 사용자는 프로필 완성 우선
                 setTimeout(() => {
-                    if (isNewUser) {
+                    if (userIsNew) {
                         navigate('/profile', { replace: true });
                     } else {
-                        navigate('/', { replace: true });
+                        navigate(targetUrl, { replace: true });
                     }
                 }, 500);
             } catch (err) {
@@ -166,9 +188,11 @@ const KakaoCallbackPage = () => {
                     return;
                 }
 
-                // 일반 모드인 경우 로그인 페이지로 리다이렉트
+                // 일반 모드인 경우 로그인 페이지로 리다이렉트 (returnUrl 유지)
                 setTimeout(() => {
-                    navigate('/login', { replace: true });
+                    const storedReturnUrl = getStoredReturnUrl();
+                    const returnUrlParam = storedReturnUrl !== '/' ? `?returnUrl=${encodeURIComponent(storedReturnUrl)}` : '';
+                    navigate(`/login${returnUrlParam}`, { replace: true });
                 }, 2000);
             }
         };

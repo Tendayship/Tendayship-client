@@ -19,6 +19,7 @@ export interface AuthContextType {
     login: () => Promise<void>;
     logout: () => Promise<void>;
     refreshAuth: () => Promise<void>;
+    isNewUser: boolean;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);

@@ -1,15 +1,17 @@
 // KakaoLoginButton.tsx
 import { useCallback, useState } from 'react';
+import { type ReactNode } from 'react';
 import axiosInstance from '../../shared/api/axiosInstance';
 import { useAuth } from '../../contexts';
 import kakaoLogo from '../../assets/kakao_talk.png';
+import { resolveReturnUrlForLogin, getStoredReturnUrl, ensureSafePath, storeReturnUrl } from '../../shared/utils/pathUtils';
 
 type KakaoUrlResponse = { login_url?: string; loginUrl?: string };
 
-// Props type definition
-type KakaoLoginButtonProps = {
-    children?: ReactNode; // ✅ children prop is now accepted
-};
+// Props type definition (kept for future use)
+// type KakaoLoginButtonProps = {
+//     children?: ReactNode;
+// };
 
 const BUTTON_BASE =
   'flex h-16 w-[400px] items-center justify-center rounded-[10px] bg-[#FEE500] text-[#371D1E] text-[22px] font-Pretendard focus:outline-none transition-colors hover:bg-[#FDE133] disabled:opacity-70 disabled:cursor-not-allowed';
@@ -25,8 +27,16 @@ export default function KakaoLoginButton() {
     setError(null);
 
     try {
+      // Get returnUrl for OAuth state parameter
+      const returnUrl = resolveReturnUrlForLogin();
+      console.log('Using returnUrl for login:', returnUrl);
+      
+      // Store in session for popup communication
+      storeReturnUrl(returnUrl);
+      
       // axiosInstance 사용 - withCredentials 자동 적용
-      const { data } = await axiosInstance.get<KakaoUrlResponse>('/auth/kakao/url');
+      const encodedState = encodeURIComponent(returnUrl);
+      const { data } = await axiosInstance.get<KakaoUrlResponse>(`/auth/kakao/url?state=${encodedState}`);
       
       const loginUrl = data?.login_url ?? data?.loginUrl;
       if (!loginUrl) throw new Error('로그인 URL을 받아오지 못했습니다.');
@@ -66,14 +76,19 @@ export default function KakaoLoginButton() {
               console.log('User data from popup:', userData);
               
               // 신규 사용자 판단 로직 (팝업에서 받은 데이터 사용)
-              const isNewUser = !userData.name || !userData.phone;
+              const userIsNew = !userData.name || !userData.phone;
               
-              console.log('Navigation decision:', { isNewUser, userData });
+              // Get stored returnUrl for navigation
+              const storedReturnUrl = getStoredReturnUrl();
+              const targetUrl = ensureSafePath(storedReturnUrl);
               
-              if (isNewUser) {
+              console.log('Navigation decision:', { userIsNew, userData, targetUrl });
+              
+              // Navigation policy: New users go to profile first, existing users to returnUrl
+              if (userIsNew) {
                 window.location.href = '/profile';
               } else {
-                window.location.href = '/';
+                window.location.href = targetUrl;
               }
               
             } catch (err) {

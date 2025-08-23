@@ -1,6 +1,19 @@
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import KakaoLoginButton from '../../features/auth/KakaoLoginButton';
+import { getReturnUrlFromSearch, storeReturnUrl } from '../../shared/utils/pathUtils';
 
 const LoginPage = () => {
+    const [searchParams] = useSearchParams();
+
+    useEffect(() => {
+        // Sync returnUrl from URL params to sessionStorage on mount
+        const returnUrl = getReturnUrlFromSearch(window.location.search);
+        if (returnUrl !== '/') {
+            storeReturnUrl(returnUrl);
+        }
+    }, [searchParams]);
+
     return (
         <main className="flex min-h-screen items-center justify-center bg-[#F1F1F1] p-4">
             <div className="h-[450px] w-[520px] border border-[#C2C2C2] bg-[#FFF] px-[50px] py-[40px] text-center">
