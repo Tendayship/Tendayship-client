@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { Link } from 'react-router-dom';
 
 // ✅ 1. LoginPage에서 사용하던 KakaoLoginButton을 import 합니다.

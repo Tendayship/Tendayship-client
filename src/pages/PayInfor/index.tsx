@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 const subscriptionInfo = {
     product: '구독상품',
@@ -13,7 +13,7 @@ const paymentInfo = {
 };
 
 const PaymentPage = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'general' | 'kakao'>('general');
     const [agreements, setAgreements] = useState({

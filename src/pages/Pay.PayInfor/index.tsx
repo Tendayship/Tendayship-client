@@ -3,17 +3,17 @@ import { useParams } from 'react-router-dom';
 import { preparePayment } from '../../api/familyApi';
 // import PaymentHeader from '../../shared/ui/PaymentHeader.js';
 
-// ... (subscriptionInfo, paymentInfo 등 변수는 동일) ...
-const subscriptionInfo = {
-    product: '패밀리 뉴스 서비스 정기 구독',
-    period: '매월 자동 결제',
-    nextPayment: '구독 시작일로부터 1개월 뒤',
-};
+// Subscription and payment info (for future use)
+// const subscriptionInfo = {
+//     product: '패밀리 뉴스 서비스 정기 구독',
+//     period: '매월 자동 결제',
+//     nextPayment: '구독 시작일로부터 1개월 뒤',
+// };
 
-const paymentInfo = {
-    productPrice: '상품 가격',
-    totalAmount: '6,900원',
-};
+// const paymentInfo = {
+//     productPrice: '상품 가격',
+//     totalAmount: '6,900원',
+// };
 
 
 const PaymentPage = () => {
@@ -21,35 +21,35 @@ const PaymentPage = () => {
     const { groupId } = useParams<{ groupId: string }>(); 
     const [isProcessing, setIsProcessing] = useState(false);
 
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
+    const [selectedPaymentMethod] = useState<
         'general' | 'kakao'
     >('kakao');
-    const [agreements, setAgreements] = useState({
+    const [agreements] = useState({
         all: false,
         required: false,
         optional: false,
     });
 
-    const handleAgreementChange = (type: 'all' | 'required' | 'optional') => {
-        if (type === 'all') {
-            const newValue = !agreements.all;
-            setAgreements({
-                all: newValue,
-                required: newValue,
-                optional: newValue,
-            });
-        } else {
-            const newAgreements = { ...agreements, [type]: !agreements[type] };
-            newAgreements.all =
-                newAgreements.required && newAgreements.optional;
-            setAgreements(newAgreements);
-        }
-    };
+    // const handleAgreementChange = (type: 'all' | 'required' | 'optional') => {
+    //     if (type === 'all') {
+    //         const newValue = !agreements.all;
+    //         setAgreements({
+    //             all: newValue,
+    //             required: newValue,
+    //             optional: newValue,
+    //         });
+    //     } else {
+    //         const newAgreements = { ...agreements, [type]: !agreements[type] };
+    //         newAgreements.all =
+    //             newAgreements.required && newAgreements.optional;
+    //         setAgreements(newAgreements);
+    //     }
+    // };
 
 
-    const handlePaymentMethodChange = (method: 'general' | 'kakao') => {
-        setSelectedPaymentMethod(method);
-    };
+    // const handlePaymentMethodChange = (method: 'general' | 'kakao') => {
+    //     setSelectedPaymentMethod(method);
+    // };
 
 
     const handlePayment = async () => {

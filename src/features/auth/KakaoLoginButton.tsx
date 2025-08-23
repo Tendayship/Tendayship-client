@@ -1,6 +1,5 @@
 // KakaoLoginButton.tsx
 import { useCallback, useState } from 'react';
-import { type ReactNode } from 'react';
 import axiosInstance from '../../shared/api/axiosInstance';
 import { useAuth } from '../../contexts';
 import kakaoLogo from '../../assets/kakao_talk.png';

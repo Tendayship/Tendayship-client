@@ -1,6 +1,7 @@
 
 
-import React, { useState, useEffect, type JSX } from "react";
+// import React,
+import { useState, useEffect, type JSX } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -45,7 +46,7 @@ const SubscriptionPageComponent = (): JSX.Element => {
                 await cancelSubscription(subscription.id, reason);
                 alert("구독이 성공적으로 해지되었습니다.");
                 fetchSubscriptionData();
-            } catch (err) {
+            } catch {
                 alert("구독 해지에 실패했습니다.");
             }
         }

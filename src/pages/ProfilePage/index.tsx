@@ -107,10 +107,9 @@ const ProfilePage = () => {
         setIsLoading(true);
 
         try {
-            let imageUrl = '';
+            // let imageUrl = '';
             if (profileImage.file) {
-                const response = await uploadProfileImage(profileImage.file);
-                imageUrl = response.profile_image_url;
+                await uploadProfileImage(profileImage.file);
             }
 
             const { name, phone, dob } = userProfile;

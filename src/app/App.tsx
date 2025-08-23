@@ -5,8 +5,8 @@ import { Outlet } from 'react-router-dom'; // Outlet을 import
 import axios from 'axios';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
+  const [, setIsLoggedIn] = useState(false);
+  const [, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ function App() {
           setIsLoggedIn(true);
           setUser(response.data);
         }
-      } catch (error) {
+      } catch {
         setIsLoggedIn(false);
         setUser(null);
       } finally {
