@@ -16,7 +16,7 @@ import {
 import frame1707484832 from "../../assets/erdream.png";
 import defaultAvatar from '../../assets/GangJiwon.png';
 import userIcon from "../../assets/Iconblack.svg";
-import calendarIcon from "../../assets/vector.svg";
+import calendarIcon from "../../assets/Vector.svg";
 import phoneIcon from "../../assets/Icon_call.svg";
 import locationIcon from "../../assets/PhoneNumber.svg";
 // import navBg from "../../assets/erdream.png";
