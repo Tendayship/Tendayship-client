@@ -3,7 +3,9 @@
     "allow": [
       "mcp__sequential-thinking__sequentialthinking",
       "mcp__context7__resolve-library-id",
-      "WebFetch(domain:postcode.map.daum.net)"
+      "WebFetch(domain:postcode.map.daum.net)",
+      "Bash(npm run build:*)",
+      "Bash(npm run lint)"
     ],
     "deny": []
   }

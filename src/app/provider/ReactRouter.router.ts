@@ -4,10 +4,10 @@ import { createBrowserRouter } from 'react-router-dom';
 // 컴포넌트 imports
 import Layout from '../../shared/ui/Layout';
 import ProtectedRoute from '../../components/ProtectedRoute';
-// import ConditionalRoute from '../../components/ConditionalRoute'; // Not used anymore
 
 // 페이지 imports
 import AuthTest from '../../components/AuthTest';
+import ConditionalRoute from '../../components/ConditionalRoute';
 import { HealthCheck } from '../../components/HealthCheck';
 import LoginPage from '../../pages/LoginPage';
 import ProfilePage from '../../pages/ProfilePage';
@@ -75,9 +75,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: React.createElement(ProtectedRoute, {
-                    children: React.createElement(MainPage),
-                }),
+                element: React.createElement(ConditionalRoute),
             },
             {
                 path: 'profile',
