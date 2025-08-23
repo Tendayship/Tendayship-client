@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { setupFamilyGroup, type FamilyGroupSetupPayload } from '../../api/familyApi';
+import PostcodeModal from '../../components/PostcodeModal';
+import { usePostcode } from '../../hooks/usePostcode';
 
 interface LocationState {
     groupName?: string;
@@ -24,21 +26,22 @@ export default function FamilyGroupSetupPage() {
     
     const [errors, setErrors] = useState<{[key: string]: boolean}>({});
     const [isLoading, setIsLoading] = useState(false);
-    const [showPostcodeSearch, setShowPostcodeSearch] = useState(false);
 
-    // Daum 우편번호 서비스 (react-daum-postcode 사용)
-    const handlePostcodeComplete = (data: { address: string; zonecode: string }) => {
-        setFormData(prev => ({
-            ...prev,
-            recipient_address: data.address,
-            recipient_postal_code: data.zonecode
-        }));
-        setShowPostcodeSearch(false);
-        setErrors(prev => ({ ...prev, recipient_address: false, recipient_postal_code: false }));
-    };
-
-    // Suppress unused variable warning - this would be used with DaumPostcode component
-    console.log('PostcodeComplete handler ready:', !!handlePostcodeComplete);
+    // Daum 우편번호 서비스 통합
+    const { isModalOpen, openModal, closeModal, handleComplete } = usePostcode({
+        onComplete: (result) => {
+            setFormData(prev => ({
+                ...prev,
+                recipient_address: result.address + result.addressDetail,
+                recipient_postal_code: result.postalCode
+            }));
+            setErrors(prev => ({ 
+                ...prev, 
+                recipient_address: false, 
+                recipient_postal_code: false 
+            }));
+        }
+    });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -230,9 +233,10 @@ export default function FamilyGroupSetupPage() {
                                         />
                                         <button
                                             type="button"
-                                            onClick={() => setShowPostcodeSearch(true)}
-                                            className="px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+                                            onClick={openModal}
+                                            className="px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
                                             disabled={isLoading}
+                                            aria-label="우편번호 검색 열기"
                                         >
                                             주소 검색
                                         </button>
@@ -298,25 +302,12 @@ export default function FamilyGroupSetupPage() {
             </div>
 
             {/* Daum Postcode Modal */}
-            {showPostcodeSearch && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-4 rounded-lg">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-semibold">주소 검색</h3>
-                            <button
-                                onClick={() => setShowPostcodeSearch(false)}
-                                className="text-gray-500 hover:text-gray-700"
-                            >
-                                ✕
-                            </button>
-                        </div>
-                        {/* DaumPostcode component would go here */}
-                        <div className="w-96 h-96 bg-gray-100 flex items-center justify-center">
-                            <p>Daum 우편번호 서비스 연동 필요</p>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <PostcodeModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                onComplete={handleComplete}
+                title="배송지 주소 검색"
+            />
         </div>
     );
 }

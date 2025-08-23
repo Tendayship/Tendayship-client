@@ -9,6 +9,9 @@ export { DashboardLayout } from './dashboard/DashboardLayout';
 // Health monitoring
 export { HealthCheck } from './HealthCheck';
 
+// UI components
+export { default as PostcodeModal } from './PostcodeModal';
+
 // Admin components
 export { default as AdminLayout } from './admin/AdminLayout';
 export { default as AdminRoute } from './admin/AdminRoute';

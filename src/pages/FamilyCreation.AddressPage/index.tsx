@@ -2,20 +2,13 @@
 
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import DaumPostcode from 'react-daum-postcode';
 // [수정] .js 확장자 제거
 import Header from '../../shared/ui/Header';
 import ProgressIndicator from '../../widgets/ProgressIndicator';
 import { registerRecipient } from '../../api/familyApi';
 import type { RecipientPayload } from '../../api/familyApi';
-
-interface DaumPostcodeData {
-    address: string;
-    addressType: string;
-    bname: string;
-    buildingName: string;
-    zonecode: string;
-}
+import PostcodeModal from '../../components/PostcodeModal';
+import { usePostcode } from '../../hooks/usePostcode';
 
 const AddressPage = () => {
     const navigate = useNavigate();
@@ -28,39 +21,22 @@ const AddressPage = () => {
         phoneNumber: '',
     });
 
-    const [isPostcodeModalOpen, setIsPostcodeModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    // Daum 우편번호 서비스 통합
+    const { isModalOpen, openModal, closeModal, handleComplete } = usePostcode({
+        onComplete: (result) => {
+            setAddressInfo(prev => ({
+                ...prev,
+                postcode: result.postalCode,
+                detailAddress: result.address + result.addressDetail
+            }));
+        }
+    });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
         setAddressInfo((prev) => ({ ...prev, [id]: value }));
-    };
-
-    const handleCompletePostcode = (data: DaumPostcodeData) => {
-        let fullAddress = data.address;
-        let extraAddress = '';
-
-        if (data.addressType === 'R') {
-            if (data.bname !== '') {
-                extraAddress += data.bname;
-            }
-            if (data.buildingName !== '') {
-                extraAddress +=
-                    extraAddress !== ''
-                        ? `, ${data.buildingName}`
-                        : data.buildingName;
-            }
-            fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
-        }
-
-        setAddressInfo((prev) => ({
-            ...prev,
-            postcode: data.zonecode,
-            // 우편번호 검색 후 상세주소 입력 필드는 비워주는 것이 사용자 경험에 더 좋습니다.
-            detailAddress: fullAddress, 
-        }));
-
-        setIsPostcodeModalOpen(false);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -125,7 +101,7 @@ const AddressPage = () => {
                                 <label htmlFor="postcode" className="mb-1 block text-sm font-medium text-gray-700">우편 번호</label>
                                 <div className="flex space-x-2">
                                     <input type="text" id="postcode" value={addressInfo.postcode} className="h-12 flex-1 rounded-md border border-gray-300 px-4" placeholder="우편 번호" readOnly />
-                                    <button type="button" onClick={() => setIsPostcodeModalOpen(true)} className="h-12 rounded-md bg-[#709ECD] px-4 text-white hover:bg-[#5a8ac4]">우편 번호 찾기</button>
+                                    <button type="button" onClick={openModal} className="h-12 rounded-md bg-[#709ECD] px-4 text-white hover:bg-[#5a8ac4] focus:outline-none focus:ring-2 focus:ring-[#709ECD] focus:ring-offset-2 transition-colors" aria-label="우편번호 검색">우편 번호 찾기</button>
                                 </div>
                             </div>
 
@@ -149,16 +125,13 @@ const AddressPage = () => {
                 </div>
             </div>
 
-            {isPostcodeModalOpen && (
-                <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 100 }}>
-                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white', padding: '20px' }}>
-                        <DaumPostcode onComplete={handleCompletePostcode} />
-                        <button onClick={() => setIsPostcodeModalOpen(false)} style={{ marginTop: '10px', width: '100%', padding: '10px' }}>
-                            닫기
-                        </button>
-                    </div>
-                </div>
-            )}
+            {/* Daum Postcode Modal */}
+            <PostcodeModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                onComplete={handleComplete}
+                title="배송지 주소 검색"
+            />
         </>
     );
 };
