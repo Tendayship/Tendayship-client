@@ -17,6 +17,8 @@ import FamilyGroupPage from '../../pages/FamilyGroupPage';
 import FamilyManagementPage from '../../pages/FamilyManagementPage';
 import AddressPage from '../../pages/AddressPage';
 import PaymentPage from '../../pages/PayInfor';
+import NewsFeedPage from '../../pages/NewsFeedPage';
+import NewsInboxPage from '../../pages/NewsInboxPage';
 import KakaoCallbackPage from '../../api/auth/kakao/KakaoCallbackPage';
 import RegisterPage from '../../pages/RegisterPage';
 import LoginSuccessPage from '../../pages/LoginSuccessPage';
@@ -69,6 +71,18 @@ const router = createBrowserRouter([
                 }),
             },
             // --- 가족 관련 페이지 ---
+            {
+                path: 'news-feed',
+                element: React.createElement(ProtectedRoute, {
+                    children: React.createElement(NewsFeedPage),
+                }),
+            },
+            {
+                path: 'news-inbox',
+                element: React.createElement(ProtectedRoute, {
+                    children: React.createElement(NewsInboxPage),
+                }),
+            },
             {
                 path: 'family/create',
                 element: React.createElement(ProtectedRoute, {
