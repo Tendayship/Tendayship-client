@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const FamilyGroupPage = () => {
+    const navigate = useNavigate();
+    
     // useState를 이용해 입력값을 관리합니다.
     const [groupName, setGroupName] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
@@ -19,12 +22,10 @@ const FamilyGroupPage = () => {
             return;
         }
 
-        // 유효성 검사를 통과한 후 실행될 로직
-        console.log(`새로운 가족 그룹 이름: "${groupName}"`);
-        alert(`"${groupName}" 가족 그룹이 성공적으로 생성되었습니다!`);
-
-        // API 호출 로직을 여기에 추가할 수 있습니다.
-        // 예시: const response = await fetch('/api/create-group', { method: 'POST', body: JSON.stringify({ name: groupName }) });
+        // 그룹 이름을 다음 단계로 전달
+        navigate('/family/create/setup', { 
+            state: { groupName: groupName.trim() } 
+        });
     };
 
     return (

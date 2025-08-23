@@ -56,8 +56,13 @@ export default function KakaoLoginButton() {
 
         // 메시지 리스너를 async 함수로 선언
         const handleMessage = async (event: MessageEvent) => {
-          // 보안을 위해 origin 체크
-          if (event.origin !== window.location.origin) {
+          // 보안을 위해 origin 체크 - 프로덕션 환경 고려
+          const allowedOrigins = [
+            window.location.origin,
+            'https://kind-sky-0070e521e.2.azurestaticapps.net'
+          ];
+          
+          if (!allowedOrigins.includes(event.origin)) {
             console.warn('Ignored message from different origin:', event.origin);
             return;
           }

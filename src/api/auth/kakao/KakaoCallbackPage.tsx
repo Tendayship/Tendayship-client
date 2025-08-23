@@ -57,12 +57,30 @@ const KakaoCallbackPage = () => {
 
                 setMessage('인증 정보를 확인하는 중...');
 
-                // 쿠키 기반 인증 상태 확인 - axiosInstance 사용
+                // 쿠키 기반 인증 상태 확인 - 재시도 로직 포함
                 console.log('Calling /auth/verify...');
-                const res = await axiosInstance.get('/auth/verify');
-                console.log('/auth/verify response:', res.status, res.data);
-                if (res.status !== 200 || !res.data.valid) {
-                    throw new Error('인증 확인에 실패했습니다.');
+                let res;
+                let retries = 3;
+                
+                while (retries > 0) {
+                    try {
+                        res = await axiosInstance.get('/auth/verify');
+                        console.log('/auth/verify response:', res.status, res.data);
+                        if (res.status === 200 && res.data.valid) {
+                            break;
+                        }
+                        throw new Error('인증 확인에 실패했습니다.');
+                    } catch (error) {
+                        retries--;
+                        console.log(`Auth verification failed, retries left: ${retries}`);
+                        
+                        if (retries === 0) {
+                            throw error;
+                        }
+                        
+                        // 재시도 전 더 긴 대기시간
+                        await new Promise((resolve) => setTimeout(resolve, 500));
+                    }
                 }
 
                 setMessage('사용자 정보를 가져오는 중...');

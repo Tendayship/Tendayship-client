@@ -7,6 +7,7 @@ const axiosInstance = axios.create({
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
+    'Accept': 'application/json',
   },
 });
 
@@ -15,6 +16,12 @@ console.log('Axios instance created with baseURL:', API_BASE);
 // 요청 인터셉터
 axiosInstance.interceptors.request.use(
   (config) => {
+    // JWT 토큰 자동 추가
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
     const baseURL = config.baseURL || '';
     const url = config.url || '';
     console.log(`Making ${config.method?.toUpperCase()} request to:`, baseURL + url);

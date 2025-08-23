@@ -11,6 +11,7 @@ import {
     type FamilyMember,
     type MyGroupData
 } from "../../api/userApi";
+import { deleteMyGroup } from "../../api/familyApi";
 
 // 이미지 import
 import frame1707484832 from "../../assets/erdream.png";
@@ -88,6 +89,72 @@ const MyFamilyPageComponent = (): JSX.Element => {
             alert("초대 코드를 불러올 수 없습니다.");
         }
     };
+
+    const handleDeleteGroup = async () => {
+        const isLeader = members.find(m => m.user_id === currentUserId)?.role === 'LEADER';
+        
+        if (!isLeader) {
+            alert('그룹 리더만 그룹을 삭제할 수 있습니다.');
+            return;
+        }
+
+        const groupName = myGroup?.group_name || '그룹';
+        const confirmMessage = `정말로 "${groupName}"을(를) 삭제하시겠습니까?\n\n⚠️ 주의사항:\n- 모든 소식과 데이터가 영구적으로 삭제됩니다\n- 활성 구독이 있다면 자동으로 취소됩니다\n- 이 작업은 되돌릴 수 없습니다`;
+        
+        if (!window.confirm(confirmMessage)) {
+            return;
+        }
+
+        // 한 번 더 확인
+        if (!window.confirm('정말로 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+            return;
+        }
+
+        try {
+            setIsLoading(true);
+            const result = await deleteMyGroup(false); // force=false로 시작
+            
+            let message = '그룹이 성공적으로 삭제되었습니다.';
+            
+            if (result.subscription_cancel.cancelled) {
+                message += `\n구독도 취소되었으며, ${result.subscription_cancel.refund_amount}원이 환불됩니다.`;
+            }
+            
+            if (result.pending_books_count > 0) {
+                message += `\n진행 중인 책자 ${result.pending_books_count}개가 취소되었습니다.`;
+            }
+            
+            alert(message);
+            navigate('/family/create'); // 그룹 생성 페이지로 이동
+        } catch (err: unknown) {
+            console.error('그룹 삭제 실패:', err);
+            
+            // 배송/제작 중인 책자가 있는 경우
+            const isAxiosError = err && typeof err === 'object' && 'response' in err;
+            const axiosError = isAxiosError ? err as { response: { status: number; data: { detail: string } } } : null;
+            if (axiosError?.response?.status === 400 && axiosError.response?.data?.detail?.includes('배송/제작 진행 중')) {
+                const forceConfirm = window.confirm(
+                    '배송/제작 진행 중인 책자가 있습니다.\n\n강제로 삭제하시겠습니까?\n(진행 중인 책자도 모두 취소됩니다)'
+                );
+                
+                if (forceConfirm) {
+                    try {
+                        await deleteMyGroup(true); // force=true로 강제 삭제
+                        alert('그룹이 강제로 삭제되었습니다.\n진행 중인 모든 작업이 취소되었습니다.');
+                        navigate('/family/create');
+                        return;
+                    } catch (forceErr) {
+                        console.error('강제 삭제도 실패:', forceErr);
+                        alert('그룹 삭제 중 오류가 발생했습니다.');
+                    }
+                }
+            } else {
+                alert('그룹 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
     
     if (isLoading) return <div className="flex justify-center items-center h-screen">로딩 중...</div>;
     if (error) return <div className="flex justify-center items-center h-screen">오류: {error}</div>;
@@ -137,9 +204,20 @@ const MyFamilyPageComponent = (): JSX.Element => {
                 <section className="mt-8">
                     <div className="flex justify-between items-center mb-2">
                         <p className="text-[#6a6a6a] text-sm">가족 멤버 목록</p>
-                        <button onClick={handleInvite} className="px-4 py-1.5 bg-[#018941] text-white text-sm rounded-md hover:bg-[#016a35]">
-                            +&nbsp;초대하기
-                        </button>
+                        <div className="flex space-x-2">
+                            <button onClick={handleInvite} className="px-4 py-1.5 bg-[#018941] text-white text-sm rounded-md hover:bg-[#016a35]">
+                                +&nbsp;초대하기
+                            </button>
+                            {currentUserIsLeader && (
+                                <button 
+                                    onClick={handleDeleteGroup}
+                                    className="px-4 py-1.5 bg-red-600 text-white text-sm rounded-md hover:bg-red-700"
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? '삭제 중...' : '그룹 삭제'}
+                                </button>
+                            )}
+                        </div>
                     </div>
 
                     <div className="border rounded-[5px] border-[#c1c1c1]">

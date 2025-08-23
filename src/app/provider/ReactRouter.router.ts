@@ -4,7 +4,7 @@ import { createBrowserRouter } from 'react-router-dom';
 // 컴포넌트 imports
 import Layout from '../../shared/ui/Layout';
 import ProtectedRoute from '../../components/ProtectedRoute';
-import ConditionalRoute from '../../components/ConditionalRoute';
+// import ConditionalRoute from '../../components/ConditionalRoute'; // Not used anymore
 
 // 페이지 imports
 import ApiTestPage from '../../pages/test/api-test-page';
@@ -26,6 +26,13 @@ import MyFamilyPageComponent from '../../pages/Mypage.Myfamily/index';
 import SubscriptionPageComponent from '../../pages/Mypage.Subscribe/index';
 import SubscriptionPage from '../../pages/Pay.SubscriptionPage';
 import FamilyCreationNamePage from '../../pages/FamilyCreation.makenamePage';
+
+// New page imports
+import MainPage from '../../pages/main/main-page';
+import CreatePostPage from '../../pages/CreatePostPage';
+import BooksPage from '../../pages/BooksPage';
+import FamilyGroupSetupPage from '../../pages/FamilyGroupSetupPage';
+import PaymentPageNew from '../../pages/PaymentPage';
 
 const router = createBrowserRouter([
     // 카카오 콜백, 백엔드 리다이렉트 경로는 Layout 밖에서 처리
@@ -60,7 +67,9 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: React.createElement(ConditionalRoute),
+                element: React.createElement(ProtectedRoute, {
+                    children: React.createElement(MainPage),
+                }),
             },
             {
                 path: 'profile',
@@ -71,6 +80,18 @@ const router = createBrowserRouter([
             // --- 가족 관련 페이지 ---
             {
                 path: 'family/create',
+                element: React.createElement(ProtectedRoute, {
+                    children: React.createElement(FamilyGroupPage),
+                }),
+            },
+            {
+                path: 'family/create/setup',
+                element: React.createElement(ProtectedRoute, {
+                    children: React.createElement(FamilyGroupSetupPage),
+                }),
+            },
+            {
+                path: 'family/create/success',
                 element: React.createElement(ProtectedRoute, {
                     children: React.createElement(FamilyCreationPage),
                 }),
@@ -100,6 +121,26 @@ const router = createBrowserRouter([
                     children: React.createElement(FamilyManagementPage),
                 }),
             },
+            // --- 소식 관련 페이지 ---
+            {
+                path: 'posts/create',
+                element: React.createElement(ProtectedRoute, {
+                    children: React.createElement(CreatePostPage),
+                }),
+            },
+            {
+                path: 'posts',
+                element: React.createElement(ProtectedRoute, {
+                    children: React.createElement(MainPage), // 임시로 메인 페이지 사용
+                }),
+            },
+            // --- 책자 관련 페이지 ---
+            {
+                path: 'books',
+                element: React.createElement(ProtectedRoute, {
+                    children: React.createElement(BooksPage),
+                }),
+            },
             // --- 마이페이지 섹션 ---
             {
                 // ✨ 추가된 경로
@@ -110,7 +151,7 @@ const router = createBrowserRouter([
             },
             {
                 // ✨ 추가된 경로
-                path: 'mypage/my-family',
+                path: 'mypage/family',
                 element: React.createElement(ProtectedRoute, {
                     children: React.createElement(MyFamilyPageComponent),
                 }),
@@ -130,9 +171,21 @@ const router = createBrowserRouter([
                 }),
             },
             {
+                path: 'subscription',
+                element: React.createElement(ProtectedRoute, {
+                    children: React.createElement(SubscriptionPageComponent),
+                }),
+            },
+            {
                 path: 'subscription/:groupId',
                 element: React.createElement(ProtectedRoute, {
                     children: React.createElement(SubscriptionPage),
+                }),
+            },
+            {
+                path: 'payment',
+                element: React.createElement(ProtectedRoute, {
+                    children: React.createElement(PaymentPageNew),
                 }),
             },
             {

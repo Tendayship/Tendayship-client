@@ -1,8 +1,76 @@
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts';
 import { Link } from 'react-router-dom';
+import { getPosts, getCurrentIssue, type Post, type CurrentIssueResponse } from '../../api';
+import { getMyGroupDetails, type MyGroupResponse } from '../../api/familyApi';
 
 export default function MainPage() {
     const { user } = useAuth();
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [currentIssue, setCurrentIssue] = useState<CurrentIssueResponse | null>(null);
+    const [myGroup, setMyGroup] = useState<MyGroupResponse | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    // Suppress unused variable warnings
+    console.log('Group data loaded:', !!myGroup);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setIsLoading(true);
+                
+                // 병렬로 데이터 가져오기
+                const [postsResponse, issueResponse, groupResponse] = await Promise.all([
+                    getPosts(0, 10).catch(() => ({ posts: [], total_count: 0, current_page: 1, total_pages: 1 })),
+                    getCurrentIssue().catch(() => null),
+                    getMyGroupDetails().catch(() => null)
+                ]);
+
+                setPosts(postsResponse.posts);
+                setCurrentIssue(issueResponse);
+                setMyGroup(groupResponse);
+                setError(null);
+            } catch (err) {
+                console.error('데이터 로딩 실패:', err);
+                setError('데이터를 불러오는데 실패했습니다.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    const getDaysUntilDeadline = (deadlineDate: string) => {
+        const now = new Date();
+        const deadline = new Date(deadlineDate);
+        const timeDiff = deadline.getTime() - now.getTime();
+        const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        return daysDiff;
+    };
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+                    <p className="text-gray-600">로딩 중...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -15,6 +83,28 @@ export default function MainPage() {
                     <p className="text-gray-600">
                         오늘도 가족들과 소중한 이야기를 나누어보세요.
                     </p>
+                    
+                    {/* 현재 회차 정보 */}
+                    {currentIssue && (
+                        <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h3 className="font-semibold text-green-800">
+                                        현재 {currentIssue.current_issue.issue_number}회차 진행 중
+                                    </h3>
+                                    <p className="text-sm text-green-600">
+                                        마감일: {new Date(currentIssue.current_issue.deadline_date).toLocaleDateString('ko-KR')}
+                                    </p>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-2xl font-bold text-green-800">
+                                        D-{getDaysUntilDeadline(currentIssue.current_issue.deadline_date)}
+                                    </div>
+                                    <p className="text-sm text-green-600">남은 일수</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* 주요 기능 카드들 */}
@@ -48,7 +138,10 @@ export default function MainPage() {
                     </Link>
 
                     {/* 소식 작성 */}
-                    <div className="rounded-lg bg-white p-6 shadow-sm">
+                    <Link
+                        to="/posts/create"
+                        className="block rounded-lg bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+                    >
                         <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
                             <svg
                                 className="h-6 w-6 text-green-600"
@@ -70,10 +163,13 @@ export default function MainPage() {
                         <p className="text-gray-600">
                             오늘의 이야기를 가족들과 공유해보세요.
                         </p>
-                    </div>
+                    </Link>
 
                     {/* 책자 보기 */}
-                    <div className="rounded-lg bg-white p-6 shadow-sm">
+                    <Link
+                        to="/books"
+                        className="block rounded-lg bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+                    >
                         <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100">
                             <svg
                                 className="h-6 w-6 text-purple-600"
@@ -95,10 +191,13 @@ export default function MainPage() {
                         <p className="text-gray-600">
                             지금까지 만들어진 가족 이야기 책자를 확인하세요.
                         </p>
-                    </div>
+                    </Link>
 
                     {/* 구독 관리 */}
-                    <div className="rounded-lg bg-white p-6 shadow-sm">
+                    <Link
+                        to="/subscription"
+                        className="block rounded-lg bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+                    >
                         <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-orange-100">
                             <svg
                                 className="h-6 w-6 text-orange-600"
@@ -120,7 +219,7 @@ export default function MainPage() {
                         <p className="text-gray-600">
                             정기 구독 현황을 확인하고 관리하세요.
                         </p>
-                    </div>
+                    </Link>
 
                     {/* 프로필 관리 */}
                     <Link
@@ -185,17 +284,83 @@ export default function MainPage() {
                     </Link>
                 </div>
 
-                {/* 최근 활동 */}
+                {/* 최근 소식 피드 */}
                 <div className="mt-8 rounded-lg bg-white p-6 shadow-sm">
-                    <h2 className="mb-4 text-xl font-semibold text-gray-900">
-                        최근 활동
-                    </h2>
-                    <div className="text-center text-gray-500">
-                        <p>아직 활동 내역이 없습니다.</p>
-                        <p className="mt-2">
-                            가족 그룹을 만들고 첫 소식을 작성해보세요!
-                        </p>
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-xl font-semibold text-gray-900">
+                            최근 소식
+                        </h2>
+                        <Link 
+                            to="/posts/create"
+                            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                        >
+                            소식 작성하기
+                        </Link>
                     </div>
+
+                    {error && (
+                        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <p className="text-red-600">{error}</p>
+                        </div>
+                    )}
+
+                    {posts.length === 0 ? (
+                        <div className="text-center text-gray-500 py-8">
+                            <p>아직 소식이 없습니다.</p>
+                            <p className="mt-2">
+                                첫 번째 소식을 작성해보세요!
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="space-y-6">
+                            {posts.map((post) => (
+                                <div key={post.id} className="border-b border-gray-200 pb-6 last:border-b-0">
+                                    <div className="flex items-start space-x-4">
+                                        <div className="flex-shrink-0">
+                                            <img
+                                                className="h-10 w-10 rounded-full object-cover"
+                                                src={post.author_profile_image || '/default-avatar.png'}
+                                                alt={post.author_name}
+                                            />
+                                        </div>
+                                        <div className="flex-grow">
+                                            <div className="flex items-center space-x-2 mb-2">
+                                                <h3 className="font-medium text-gray-900">
+                                                    {post.author_name}
+                                                </h3>
+                                                <span className="text-sm text-gray-500">
+                                                    {formatDate(post.created_at)}
+                                                </span>
+                                            </div>
+                                            <p className="text-gray-700 mb-3 whitespace-pre-wrap">
+                                                {post.content}
+                                            </p>
+                                            {post.image_urls && post.image_urls.length > 0 && (
+                                                <div className="grid grid-cols-2 gap-2 max-w-md">
+                                                    {post.image_urls.map((imageUrl, index) => (
+                                                        <img
+                                                            key={index}
+                                                            src={imageUrl}
+                                                            alt={`${post.author_name}의 소식 이미지 ${index + 1}`}
+                                                            className="rounded-lg object-cover aspect-square"
+                                                        />
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            <div className="text-center mt-6">
+                                <Link
+                                    to="/posts"
+                                    className="text-green-600 hover:text-green-700 font-medium"
+                                >
+                                    모든 소식 보기 →
+                                </Link>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
