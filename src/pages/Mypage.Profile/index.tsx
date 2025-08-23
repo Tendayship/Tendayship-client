@@ -15,7 +15,7 @@ import frame1707484832 from "../../assets/erdream.png";
 import editIcon from "../../assets/Edit.svg";
 import userIcon from "../../assets/Iconblack.svg";
 import phoneIcon from "../../assets/Icon_call.svg";
-import calendarIcon from "../../assets/vector.svg";
+import calendarIcon from "../../assets/Vector.svg";
 import logo from "../../assets/erdream.png";
 import navBg from "../../assets/erdream.png";
 
