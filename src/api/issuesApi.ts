@@ -7,7 +7,7 @@ export interface Issue {
     id: string;
     issue_number: number;
     deadline_date: string;
-    status: 'OPEN' | 'CLOSED';
+    status: 'OPEN' | 'CLOSED' | 'PUBLISHED';
     days_until_deadline: number;
     created_at: string;
 }
@@ -21,7 +21,7 @@ export interface CreateIssuePayload {
     group_id: string;
     issue_number: number;
     deadline_date: string;
-    status: 'OPEN' | 'CLOSED';
+    status: 'OPEN' | 'CLOSED' | 'PUBLISHED';
 }
 
 export interface IssuesListResponse {
@@ -56,7 +56,7 @@ export const getIssue = async (issueId: string): Promise<Issue> => {
 // 회차 상태 업데이트 (리더만 가능)
 export const updateIssueStatus = async (
     issueId: string, 
-    status: 'OPEN' | 'CLOSED'
+    status: 'OPEN' | 'CLOSED' | 'PUBLISHED'
 ): Promise<Issue> => {
     const response = await axiosInstance.put<Issue>(`/issues/${issueId}/status`, { status });
     return response.data;

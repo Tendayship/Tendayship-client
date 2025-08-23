@@ -1,7 +1,7 @@
 // src/pages/SubscriptionPage/index.tsx (연결 및 개선 완료)
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { createSubscription } from '../../api/subscriptionApi';
+import { useParams } from 'react-router-dom';
+import { prepareSubscriptionPayment } from '../../api/subscriptionApi';
 
 // 수령일 옵션을 const 객체로 정의하여 타입 안정성 및 가독성 향상
 const DeliveryDate = {
@@ -12,7 +12,7 @@ const DeliveryDate = {
 type DeliveryDateType = typeof DeliveryDate[keyof typeof DeliveryDate];
 
 const SubscriptionPage = () => {
-    const navigate = useNavigate();
+    // Removed navigate as payment redirect is handled directly
     const { groupId } = useParams<{ groupId: string }>();
     const [selectedDate, setSelectedDate] = useState<DeliveryDateType | null>(null);
     const [isSubscribing, setIsSubscribing] = useState<boolean>(false);
@@ -30,19 +30,9 @@ const SubscriptionPage = () => {
 
         setIsSubscribing(true);
         try {
-            const subscription = await createSubscription(groupId, {
-                deliveryDate: selectedDate,
-            });
-            
-            if (subscription && subscription.subscriptionId && subscription.nextPaymentDate) {
-                alert(
-                    `구독 신청이 완료되었습니다. 다음 결제일은 ${subscription.nextPaymentDate} 입니다.`
-                );
-                navigate(`/payment/${subscription.subscriptionId}`);
-            } else {
-                console.error('구독 생성 후 유효하지 않은 응답:', subscription);
-                alert('구독 처리 중 예기치 않은 오류가 발생했습니다. 다시 시도해 주세요.');
-            }
+            const paymentReady = await prepareSubscriptionPayment();
+            // 카카오페이 결제 페이지로 리다이렉트
+            window.location.href = paymentReady.next_redirect_pc_url;
         } catch (error) {
             console.error('구독 생성 실패:', error);
             alert('구독 처리 중 오류가 발생했습니다.');

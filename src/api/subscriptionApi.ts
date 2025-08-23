@@ -2,13 +2,15 @@
 
 import axiosInstance from '../shared/api/axiosInstance';
 
-export interface CreateSubscriptionPayload {
-    deliveryDate: string;
+export interface SubscriptionCancelRequest {
+    reason: string;
 }
 
-export interface Subscription {
-    subscriptionId: string;
-    nextPaymentDate: string;
+export interface SubscriptionCancelResponse {
+    message: string;
+    cancelled_at: string;
+    refund_amount: number;
+    payment_cancel_status: string;
 }
 
 export interface MySubscription {
@@ -51,16 +53,7 @@ export interface PaymentApprovalResponse {
     approved_at: string;
 }
 
-export const createSubscription = async (
-    groupId: string,
-    payload: CreateSubscriptionPayload
-): Promise<Subscription> => {
-    const response = await axiosInstance.post<Subscription>(
-        `/subscriptions/${groupId}`,
-        payload
-    );
-    return response.data;
-};
+// Removed - use prepareSubscriptionPayment instead
 
 // 결제 준비
 export const prepareSubscriptionPayment = async (): Promise<PaymentReadyResponse> => {
@@ -70,19 +63,15 @@ export const prepareSubscriptionPayment = async (): Promise<PaymentReadyResponse
     return response.data;
 };
 
-// 결제 승인 (카카오페이 콜백 처리)
+// 결제 승인 (카카오페이 콜백 처리) - GET 방식으로 변경
 export const approvePayment = async (
     pgToken: string,
-    partnerOrderId: string
-): Promise<PaymentApprovalResponse> => {
-    const response = await axiosInstance.post<PaymentApprovalResponse>(
-        '/subscription/payment/approve',
-        {
-            pg_token: pgToken,
-            partner_order_id: partnerOrderId
-        }
-    );
-    return response.data;
+    tempId: string
+): Promise<void> => {
+    // This should be handled by redirect, not direct API call
+    // Backend handles: GET /subscription/approve?pg_token=xxx&temp_id=xxx
+    const url = `/subscription/approve?pg_token=${pgToken}&temp_id=${tempId}`;
+    window.location.href = url;
 };
 
 // 내 구독 목록 조회
@@ -101,10 +90,35 @@ export const getSubscription = async (subscriptionId: string): Promise<MySubscri
 export const cancelSubscription = async (
     subscriptionId: string,
     reason: string
-): Promise<{ message: string }> => {
-    const response = await axiosInstance.post<{ message: string }>(
+): Promise<SubscriptionCancelResponse> => {
+    const response = await axiosInstance.post<SubscriptionCancelResponse>(
         `/subscription/${subscriptionId}/cancel`,
         { reason }
     );
     return response.data;
+};
+
+// 구독 히스토리 조회
+export const getSubscriptionHistory = async (): Promise<SubscriptionHistoryResponse[]> => {
+    const response = await axiosInstance.get<SubscriptionHistoryResponse[]>('/subscription/my/history');
+    return response.data;
+};
+
+export interface SubscriptionHistoryResponse {
+    id: string;
+    subscription_id: string;
+    status: string;
+    amount: number;
+    created_at: string;
+    notes?: string;
+}
+
+// 결제 취소 페이지로 리다이렉트
+export const redirectToCancel = (): void => {
+    window.location.href = '/subscription/cancel';
+};
+
+// 결제 실패 페이지로 리다이렉트
+export const redirectToFail = (): void => {
+    window.location.href = '/subscription/fail';
 };

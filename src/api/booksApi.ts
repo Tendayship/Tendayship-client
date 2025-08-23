@@ -10,6 +10,9 @@ export interface Book {
     group_id: string;
     title: string;
     status: 'PENDING' | 'GENERATING' | 'COMPLETED' | 'FAILED';
+    production_status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'SHIPPED';
+    delivery_status: 'PENDING' | 'SHIPPED' | 'IN_TRANSIT' | 'DELIVERED';
+    tracking_number?: string;
     pdf_url?: string;
     created_at: string;
     completed_at?: string;

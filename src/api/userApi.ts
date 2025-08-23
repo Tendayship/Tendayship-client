@@ -128,10 +128,17 @@ export const getMySubscription = async (): Promise<SubscriptionData> => {
 export const cancelSubscription = async (
     subscriptionId: string,
     reason: string
-): Promise<void> => {
-    await axiosInstance.post(`/subscription/${subscriptionId}/cancel`, null, {
-        params: { reason },
-    });
+): Promise<{
+    message: string;
+    cancelled_at: string;
+    refund_amount: number;
+    payment_cancel_status: string;
+}> => {
+    const response = await axiosInstance.post(
+        `/subscription/${subscriptionId}/cancel`,
+        { reason }
+    );
+    return response.data;
 };
 
 /**
