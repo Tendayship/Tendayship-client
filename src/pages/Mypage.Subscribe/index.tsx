@@ -126,7 +126,7 @@ const SubscriptionPageComponent = (): JSX.Element => {
                             <div className="w-1/4 text-right">금액</div>
                         </div>
                         <div>
-                            {subscription?.payment_records.slice(0, visibleRecords).map((record) => (
+                            {subscription?.payment_records?.slice(0, visibleRecords)?.map((record) => (
                                 <div key={record.id} className="flex h-12 items-center px-4 border-t">
                                     <div className="w-1/4 text-sm text-[#6a6a6a]">{record.payment_date}</div>
                                     <div className="w-1/4 text-base">{record.plan_name}</div>
@@ -138,7 +138,7 @@ const SubscriptionPageComponent = (): JSX.Element => {
                             ))}
                         </div>
                     </div>
-                    {subscription && subscription.payment_records.length > visibleRecords && (
+                    {subscription && subscription.payment_records && subscription.payment_records.length > visibleRecords && (
                         <div className="text-center mt-6">
                             <button onClick={() => setVisibleRecords(prev => prev + 5)} className="w-[120px] h-7 rounded-[14px] border border-solid border-black text-sm">
                                 더보기
