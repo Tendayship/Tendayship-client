@@ -61,8 +61,8 @@ const LandingPage = () => {
             {/* Features Section */}
             <section className="relative pt-[120px]">
                 {/* Background Shapes */}
-                <div className="pointer-events-none absolute inset-x-0 top-[140px] z-[1] h-[300px] rounded-tl-[0px] rounded-tr-[150px] rounded-br-[150px] rounded-bl-[0px] bg-[#02542D] shadow-[0_30px_60px_-12px_rgba(50,50,93,0.25),_0_18px_36px_-18px_rgba(0,0,0,0.30)]"></div>
-                <div className="pointer-events-none absolute top-[260px] right-0 z-0 h-[190px] w-[1250px] rounded-tl-[95px] rounded-tr-[0px] rounded-br-[0px] rounded-bl-[95px] bg-[#DCDA98] shadow-[0_5px_30px_0_rgba(149,157,165,0.05)]"></div>
+                <div className="pointer-events-none absolute inset-x-0 top-[348px] z-[1] h-[300px] rounded-tl-[0px] rounded-tr-[150px] rounded-br-[150px] rounded-bl-[0px] bg-[#02542D] shadow-[0_30px_60px_-12px_rgba(50,50,93,0.25),_0_18px_36px_-18px_rgba(0,0,0,0.30)]"></div>
+                <div className="pointer-events-none absolute top-[548px] right-0 z-0 h-[190px] w-[1250px] rounded-tl-[95px] rounded-tr-[0px] rounded-br-[0px] rounded-bl-[95px] bg-[#DCDA98] shadow-[0_5px_30px_0_rgba(149,157,165,0.05)]"></div>
                 <div className="mx-auto max-w-7xl">
                     <div className="mb-16 text-center">
                         <h2 className="mb-4 text-[48px] text-gray-900 md:text-4xl">
@@ -75,36 +75,36 @@ const LandingPage = () => {
 
                     <div className="relative z-20 grid gap-8 md:grid-cols-3">
                         {/* Feature 1 */}
-                        <div className="group text-center">
+                        <div className="group flex flex-col items-center text-center">
                             <div className="mx-auto mb-6 h-[200px] w-[200px] shrink-0 rounded-[105px] bg-[lightgray] bg-[url('/landpage-1.png')] bg-[length:150.588%_100%] bg-[position:-91.623px_5.596px] bg-no-repeat shadow-lg transition-transform group-hover:scale-110"></div>
-                            <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                            <h3 className="mb-3 text-xl font-semibold text-white">
                                 일상의 순간 공유하기
                             </h3>
-                            <p className="text-gray-600">
+                            <p className="max-w-[208px] text-[#A8A8A8]">
                                 오늘 하루 있었던 소소한 일들을 사진과 함께
                                 가족들과 나누어보세요.
                             </p>
                         </div>
 
                         {/* Feature 2 */}
-                        <div className="group text-center">
-                            <div className="mx-auto mb-6 h-[200px] w-[200px] shrink-0 rounded-[105px] bg-[lightgray] bg-[url('/landpage-2.png')] bg-[length:150.588%_100%] bg-[position:-91.623px_5.596px] bg-no-repeat shadow-lg transition-transform group-hover:scale-110"></div>
-                            <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                        <div className="group flex flex-col items-center text-center">
+                            <div className="mx-auto mb-6 h-[200px] w-[200px] shrink-0 rounded-[105px] bg-[url('/landpage-2.png')] bg-cover bg-center bg-no-repeat shadow-lg transition-transform group-hover:scale-110"></div>
+                            <h3 className="mb-3 text-xl font-semibold text-white">
                                 매월 책으로 제작하기
                             </h3>
-                            <p className="text-gray-600">
+                            <p className="max-w-[208px] text-[#A8A8A8]">
                                 한 달 동안의 이야기들을 모아 아름다운 가족
                                 책자로 만들어드립니다.
                             </p>
                         </div>
 
                         {/* Feature 3 */}
-                        <div className="group text-center">
-                            <div className="mx-auto mb-6 h-[200px] w-[200px] shrink-0 rounded-[105px] bg-[lightgray] bg-[url('/landpage-3.png')] bg-[length:150.588%_100%] bg-[position:-91.623px_5.596px] bg-no-repeat shadow-lg transition-transform group-hover:scale-110"></div>
-                            <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                        <div className="group flex flex-col items-center text-center">
+                            <div className="mx-auto mb-6 h-[200px] w-[200px] shrink-0 rounded-[105px] bg-[url('/landpage-3.png')] bg-cover bg-center bg-no-repeat shadow-lg transition-transform group-hover:scale-110"></div>
+                            <h3 className="mb-3 text-xl font-semibold text-white">
                                 가족만의 추억 보관함
                             </h3>
-                            <p className="text-gray-600">
+                            <p className="max-w-[208px] text-[#A8A8A8]">
                                 소중한 가족의 기억들을 안전하게 보관하고 언제든
                                 다시 꺼내볼 수 있어요.
                             </p>
@@ -114,7 +114,7 @@ const LandingPage = () => {
             </section>
 
             {/* Product Section */}
-            <section className="bg-gradient-to-r from-green-50 to-green-100 px-6 py-20">
+            <section className="bg-gradient-to-r from-green-50 to-green-100 px-6 py-20 pt-[244px]">
                 <div className="mx-auto max-w-7xl">
                     <div className="grid items-center gap-12 lg:grid-cols-2">
                         <div>
