@@ -7,8 +7,8 @@ import ProtectedRoute from '../../components/ProtectedRoute';
 // import ConditionalRoute from '../../components/ConditionalRoute'; // Not used anymore
 
 // 페이지 imports
-import ApiTestPage from '../../pages/test/api-test-page';
 import AuthTest from '../../components/AuthTest';
+import { HealthCheck } from '../../components/HealthCheck';
 import LoginPage from '../../pages/LoginPage';
 import ProfilePage from '../../pages/ProfilePage';
 import FamilyCreationPage from '../../pages/FamilyCreation.Sucess';
@@ -202,11 +202,14 @@ const router = createBrowserRouter([
                     children: React.createElement(PaymentPage),
                 }),
             },
-            // --- 테스트 페이지 ---
+            // --- 건강 상태 확인 페이지 ---
             {
-                path: 'api-test',
+                path: 'health-check',
                 element: React.createElement(ProtectedRoute, {
-                    children: React.createElement(ApiTestPage),
+                    children: React.createElement('div', { className: 'container mx-auto p-6' },
+                        React.createElement('h1', { className: 'text-2xl font-bold mb-4' }, '시스템 상태 확인'),
+                        React.createElement(HealthCheck)
+                    ),
                 }),
             },
             {
