@@ -3,16 +3,18 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createSubscription } from '../../api/subscriptionApi';
 
-// 수령일 옵션을 enum으로 정의하여 타입 안정성 및 가독성 향상
-enum DeliveryDate {
-    SecondSunday = 'SECOND_SUNDAY',
-    FourthSunday = 'FOURTH_SUNDAY',
-}
+// 수령일 옵션을 const 객체로 정의하여 타입 안정성 및 가독성 향상
+const DeliveryDate = {
+    SecondSunday: 'SECOND_SUNDAY',
+    FourthSunday: 'FOURTH_SUNDAY',
+} as const;
+
+type DeliveryDateType = typeof DeliveryDate[keyof typeof DeliveryDate];
 
 const SubscriptionPage = () => {
     const navigate = useNavigate();
     const { groupId } = useParams<{ groupId: string }>();
-    const [selectedDate, setSelectedDate] = useState<DeliveryDate | null>(null);
+    const [selectedDate, setSelectedDate] = useState<DeliveryDateType | null>(null);
     const [isSubscribing, setIsSubscribing] = useState<boolean>(false);
 
     // '정기 구독 시작하기' 버튼 클릭 핸들러

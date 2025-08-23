@@ -6,6 +6,7 @@ import axiosInstance from '../shared/api/axiosInstance';
 
 export interface CreateGroupPayload {
     name: string;
+    relationship?: string;
 }
 
 export interface FamilyGroup {

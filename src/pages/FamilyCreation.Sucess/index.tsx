@@ -8,16 +8,10 @@ import image from '../../assets/Share.svg';
 // import Header from '../../shared/ui/Header';
 import ProgressIndicator from '../../widgets/ProgressIndicator';
 
-interface Step {
-    number: number;
-    isActive: boolean;
-    bgColor: string;
-}
-
-const stepData: Step[] = [
-    { number: 1, isActive: false, bgColor: "bg-green-600" }, // 완료된 단계
-    { number: 2, isActive: false, bgColor: "bg-green-600" }, // 완료된 단계
-    { number: 3, isActive: true, bgColor: "bg-green-600" },  // 현재 활성화된 단계
+const stepData = [
+    { number: 1, isActive: false, isCompleted: true },
+    { number: 2, isActive: false, isCompleted: true },
+    { number: 3, isActive: true, isCompleted: false },
 ];
 
 const FamilyCreationCompletePage = () => {

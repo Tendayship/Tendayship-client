@@ -16,7 +16,7 @@ const RegisterPage = () => {
                 </p>
 
                 {/* ✅ 2. 기존 버튼 대신 KakaoLoginButton 컴포넌트를 직접 사용합니다. */}
-<KakaoLoginButton>카카오로 1초 만에 시작하기</KakaoLoginButton>
+                <KakaoLoginButton />
 
                 <hr className="my-[20px] w-full border-[#C2C2C2]" />
 

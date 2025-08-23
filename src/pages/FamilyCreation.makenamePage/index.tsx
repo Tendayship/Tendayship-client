@@ -2,12 +2,18 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // 페이지 이동 hook
 import { createFamilyGroup } from '../../api/familyApi'; // 우리가 만든 API 함수
 
+interface Message {
+    text: string;
+    type: 'success' | 'error';
+}
+
 // This component handles the creation of a new family group by name.
 const FamilyCreationNamePage = () => {
     const navigate = useNavigate();
     const [groupName, setGroupName] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태 추가
+    const [message, setMessage] = useState<Message | null>(null); // 메시지 상태 추가
 
     // Handles changes to the input field
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

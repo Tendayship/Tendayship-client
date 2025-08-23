@@ -92,14 +92,11 @@ const AddressPage = () => {
         }
     };
 
-    // ▼▼▼ [수정] stepData 형식 변경 ▼▼▼
     const stepData = [
-        // ProgressIndicator가 요구하는 형식에 맞게 isActive와 bgColor를 명시합니다.
-        { number: 1, isActive: true, bgColor: '#709ECD' }, // 완료된 단계
-        { number: 2, isActive: true, bgColor: '#709ECD' }, // 현재 활성 단계
-        { number: 3, isActive: false, bgColor: '#D1D5DB' },// 비활성 단계 (tailwindcss gray-300)
+        { number: 1, isActive: false, isCompleted: true },
+        { number: 2, isActive: true, isCompleted: false },
+        { number: 3, isActive: false, isCompleted: false },
     ];
-    // ▲▲▲ [수정] stepData 형식 변경 ▲▲▲
 
     return (
         <>

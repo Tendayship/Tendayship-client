@@ -92,9 +92,9 @@ const AddressPage = () => {
     };
 
     const stepData = [
-        { number: 1, isActive: false, bgColor: 'bg-[#c1c1c1]' },
-        { number: 2, isActive: true, bgColor: 'bg-[#018941]' },
-        { number: 3, isActive: false, bgColor: 'bg-[#c1c1c1]' },
+        { number: 1, isActive: false, isCompleted: true },
+        { number: 2, isActive: true, isCompleted: false },
+        { number: 3, isActive: false, isCompleted: false },
     ];
 
     return (
