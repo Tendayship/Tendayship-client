@@ -362,7 +362,7 @@ const LandingPage: React.FC = () => {
                   </p>
                   <button
                     onClick={handleStartClick}
-                    className="w-full bg-brand-yellow hover:bg-brand-yellow-light text-brand-black px-6 py-3 rounded-lg font-medium font-pretendard transition-colors focus:outline-none focus:ring-2 focus:ring-brand-white focus:ring-offset-2 focus:ring-offset-brand-dark-green"
+                    className="w-full bg-brand-dark-green hover:bg-brand-dark-green/80 text-brand-white px-6 py-3 rounded-lg font-medium font-pretendard transition-colors focus:outline-none focus:ring-2 focus:ring-brand-white focus:ring-offset-2 focus:ring-offset-brand-dark-green"
                   >
                     지금 시작하기
                   </button>
