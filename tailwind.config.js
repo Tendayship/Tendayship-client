@@ -20,6 +20,7 @@ export default {
             fontFamily: {
                 'pretendard': ['Pretendard', 'system-ui', 'sans-serif'],
                 'kyobo': ['Kyobo Handwriting 2020', 'cursive']
+
             }
         },
     },

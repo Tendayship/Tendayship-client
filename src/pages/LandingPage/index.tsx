@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -15,96 +16,84 @@ const LandingPage: React.FC = () => {
     }
   };
 
+
   return (
     <div className="w-full min-h-screen bg-brand-white overflow-x-hidden">
       {/* Header Navigation */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-brand-white/90 backdrop-blur-sm border-b border-brand-gray-lighter">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <div className="flex items-center">
-            <img 
-              src="/yeo-dream-logo.png" 
-              alt="이어드림 로고" 
-              className="h-10 w-auto"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-              }}
-            />
-            <div className="ml-2 h-10 w-28 bg-brand-navy rounded flex items-center justify-center">
-              <span className="text-brand-white text-lg font-bold font-pretendard">이어드림</span>
-            </div>
-          </div>
-          
-          <nav className="hidden md:flex items-center space-x-8" role="navigation" aria-label="주요 네비게이션">
-            <button 
-              onClick={() => scrollToSection('hero')}
-              className="text-brand-gray-dark hover:text-brand-navy font-pretendard text-sm font-medium transition-colors"
-              aria-label="홈 섹션으로 이동"
-            >
-              홈
-            </button>
-            <button 
-              onClick={() => scrollToSection('process')}
-              className="text-brand-gray-dark hover:text-brand-navy font-pretendard text-sm font-medium transition-colors"
-              aria-label="서비스 과정으로 이동"
-            >
-              서비스 과정
-            </button>
-            <button 
-              onClick={() => scrollToSection('faq')}
-              className="text-brand-gray-dark hover:text-brand-navy font-pretendard text-sm font-medium transition-colors"
-              aria-label="자주 묻는 질문으로 이동"
-            >
-              FAQ
-            </button>
-            <button 
-              onClick={() => scrollToSection('testimonials')}
-              className="text-brand-gray-dark hover:text-brand-navy font-pretendard text-sm font-medium transition-colors"
-              aria-label="이용 후기로 이동"
-            >
-              이용 후기
-            </button>
-          </nav>
-        </div>
-      </header>
+        <div className="relative mx-auto h-[45px] flex items-center bg-gradient-to-r from-[#00652F] to-[#C7C678]">
+  <div className="flex items-center">{/* 좌측 영역 */}</div>
+
+  <nav
+    className="hidden md:flex items-center space-x-[100px] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+    role="navigation"
+    aria-label="주요 네비게이션"
+  >
+    <button
+      onClick={() => scrollToSection('hero')}
+      className="text-[#FFFFFF] font-pretendard text-sm font-medium transition-colors"
+      aria-label="홈 섹션으로 이동"
+    >
+      홈
+    </button>
+
+    <Link to="/main/main-page">
+      <button className="text-[#FFFFFF] font-pretendard text-sm font-medium transition-colors">
+        소식 피드
+      </button>
+    </Link>
+
+    <Link to="/main/main-page">
+      <button className="text-[#FFFFFF] font-pretendard text-sm font-medium transition-colors">
+        책자 페이지
+      </button>
+    </Link>
+
+    <Link to="/Mypage.Profile">
+      <button className="text-[#FFFFFF] font-pretendard text-sm font-medium transition-colors">
+        프로필
+      </button>
+    </Link>
+  </nav>
+</div>
+
+      {/* </header> */}
 
       {/* Hero Section */}
       <section 
-        id="hero" 
-        className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-navy/20 to-brand-dark-green/10"
-        aria-label="메인 소개 섹션"
+  id="hero" 
+  className="relative min-h-screen flex items-center justify-center bg-[url('/hero-bg.jpg')] bg-cover bg-center"
+  aria-label="메인 소개 섹션"
+>
+  {/* 어두운 오버레이 */}
+  <div className="absolute inset-0 bg-black/40"></div>
+
+  <div className="relative z-10 container mx-auto px-4 text-center">
+    <div className="max-w-4xl mx-auto">
+      <h1 className="font-[Pretendard] text-brand-white text-[28px] md:text-6xl font-light mb-4 leading-tight">
+        어르신 댁으로 전해지는 가족의 사진과 이야기
+      </h1>
+      <p className="font-[cursive] text-brand-white text-[56px] md:text-2xl mb-12 opacity-90">
+        한 권의 책자로 잇는 가족의 마음
+      </p>
+      <button
+        onClick={handleStartClick}
+        className="font-[Pretendard] inline-flex items-center gap-3 bg-brand-dark-green/80 hover:bg-brand-dark-green text-brand-white px-8 py-4 rounded-full text-lg font-medium font-pretendard transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2"
+        aria-label="이어드림 서비스 시작하기"
       >
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative z-10 container mx-auto px-4 text-center">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-brand-white text-4xl md:text-6xl font-light font-pretendard mb-4 leading-tight">
-              어르신 댁으로 전해지는
-              <br />
-              <span className="font-kyobo text-5xl md:text-7xl font-normal">
-                가족의 사진과 이야기
-              </span>
-            </h1>
-            <p className="text-brand-white text-xl md:text-2xl font-pretendard mb-12 opacity-90">
-              한 권의 책자로 잇는 가족의 마음
-            </p>
-            <button
-              onClick={handleStartClick}
-              className="inline-flex items-center gap-3 bg-brand-dark-green/80 hover:bg-brand-dark-green text-brand-white px-8 py-4 rounded-full text-lg font-medium font-pretendard transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2"
-              aria-label="이어드림 서비스 시작하기"
-            >
-              <span>시작하기</span>
-              <svg 
-                className="w-5 h-5" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </section>
+        <span>시작하기</span>
+        <svg 
+          className="w-5 h-5" 
+          fill="#01894199" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
 
       {/* Process Section */}
       <section 
@@ -123,46 +112,35 @@ const LandingPage: React.FC = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center group">
-              <div className="w-48 h-48 mx-auto mb-6 rounded-full bg-gradient-to-br from-brand-yellow-light to-brand-yellow flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                <div className="w-32 h-32 bg-brand-white/30 rounded-full flex items-center justify-center">
-                  <span className="text-4xl" role="img" aria-label="사진 공유">📷</span>
-                </div>
-              </div>
-              <h3 className="text-brand-black text-xl font-medium font-pretendard mb-2">
-                일상의 순간을 공유해요
-              </h3>
-              <p className="text-brand-gray font-pretendard leading-relaxed">
-                가족 누구나 사진과 글을 공유할 수 있습니다.
-              </p>
-            </div>
+
+          </div>
+        </div>
+      </section>
+      
+            {/* Custom Shape Section */}
+      <section className="relative py-24" aria-label="스샷 도형 섹션">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center">
             
-            <div className="text-center group">
-              <div className="w-48 h-48 mx-auto mb-6 rounded-full bg-gradient-to-br from-brand-navy/20 to-brand-dark-green/20 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                <div className="w-32 h-32 bg-brand-white/50 rounded-full flex items-center justify-center">
-                  <span className="text-4xl" role="img" aria-label="책 제작">📖</span>
-                </div>
+            {/* Left Green Shape */}
+            <div className="flex-1 h-72 md:h-96 rounded-[0_150px_150px_0] bg-[#02542D] shadow-[0_5px_30px_0_rgba(149,157,165,0.05)] flex items-center px-10">
+              <div className="text-left max-w-md text-white">
+                <h2 className="text-3xl font-bold mb-4">
+                  일상의 온기를 부모님께
+                </h2>
+                <p className="text-lg opacity-90 leading-relaxed">
+                  가족의 마음이 책자로 완성되는 과정
+                </p>
               </div>
-              <h3 className="text-brand-black text-xl font-medium font-pretendard mb-2">
-                세상 단 하나뿐인 책으로
-              </h3>
-              <p className="text-brand-gray font-pretendard leading-relaxed">
-                큰 글씨와 따뜻한 디자인의 책으로 만듭니다.
-              </p>
             </div>
-            
-            <div className="text-center group">
-              <div className="w-48 h-48 mx-auto mb-6 rounded-full bg-gradient-to-br from-brand-yellow-light to-brand-yellow flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                <div className="w-32 h-32 bg-brand-white/30 rounded-full flex items-center justify-center">
-                  <span className="text-4xl" role="img" aria-label="배송">💝</span>
-                </div>
-              </div>
-              <h3 className="text-brand-black text-xl font-medium font-pretendard mb-2">
-                부모님께 감동이 도착해요
-              </h3>
-              <p className="text-brand-gray font-pretendard leading-relaxed">
-                매달 세상 단 하나뿐인 책을 보내드립니다.
-              </p>
+
+            {/* Right Yellow Shape */}
+            <div className="flex-1 h-72 md:h-96 rounded-[95px_0_0_95px] bg-[#DCDA98] shadow-[0_5px_30px_0_rgba(149,157,165,0.05)] flex items-center justify-center px-6">
+              <img
+                src="/sample.png"
+                alt="책자 이미지"
+                className="w-56 h-72 object-cover rounded-[105px] shadow-[0_30px_60px_-12px_rgba(50,50,93,0.25),0_18px_36px_-18px_rgba(0,0,0,0.30)]"
+              />
             </div>
           </div>
         </div>
@@ -291,11 +269,13 @@ const LandingPage: React.FC = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+<div className="grid grid-cols-5 gap-8 w-full max-w-screen-lg mx-auto h-[350px]">
             {[
               { rating: 5, text: "매달 아들 딸 소식을 받아보니 너무 좋아요. 사진도 큼직하게 잘 나오고 글씨도 커서 읽기 편해요.", author: "김○○ 님 (75세)" },
               { rating: 5, text: "손자 손녀 사진을 이렇게 예쁜 책으로 받아보니 정말 감동이에요. 매일매일 보고 또 봐도 행복합니다.", author: "이○○ 님 (70세)" },
-              { rating: 5, text: "멀리 사는 자식들 근황을 이렇게 받아볼 수 있어서 너무 감사해요. 이웃들에게도 자랑하고 다녀요.", author: "박○○ 님 (78세)" }
+              { rating: 5, text: "멀리 사는 자식들 근황을 이렇게 받아볼 수 있어서 너무 감사해요. 이웃들에게도 자랑하고 다녀요.", author: "박○○ 님 (78세)" },
+              { rating: 5, text: "매달 아들 딸 소식을 받아보니 너무 좋아요. 사진도 큼직하게 잘 나오고 글씨도 커서 읽기 편해요.", author: "김○○ 님 (75세)" },
+              { rating: 5, text: "매달 아들 딸 소식을 받아보니 너무 좋아요. 사진도 큼직하게 잘 나오고 글씨도 커서 읽기 편해요.", author: "김○○ 님 (75세)" }
             ].map((testimonial, index) => (
               <div key={index} className="bg-brand-dark-green/80 rounded-3xl p-8 text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex justify-center mb-4" aria-label={`${testimonial.rating}점 만점에 ${testimonial.rating}점`}>
@@ -316,62 +296,46 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-brand-dark-green text-brand-white py-16" role="contentinfo">
+      <section className="bg-[#02542D] px-6 py-20 text-white">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
             <div>
-              <h3 className="text-2xl font-semibold font-pretendard mb-6">이어드림</h3>
+              <h3 className="text-2xl font-Pretendard mb-6">이어드림</h3>
               <div className="space-y-3 text-brand-gray-light font-pretendard">
                 <div className="flex gap-4">
                   <span className="font-semibold">대표자</span>
                   <span>이찬희</span>
                 </div>
                 <div className="flex gap-4">
-                  <span className="font-semibold">주소</span>
-                  <span>서울 서대문구 이화여대길 52 201호</span>
+                  <span className="font-Pretendard text-[#C2C2C2]">주소</span>
+                  <span className="font-Pretendard text-[#C2C2C2]">서울 서대문구 이화여대길 52 201호</span>
                 </div>
                 <div className="flex gap-4">
-                  <span className="font-semibold">고객센터</span>
-                  <span>070-8064-2260 (평일 10:00-18:00)</span>
+                  <span className="font-Pretendard text-[#C2C2C2]">고객센터</span>
+                  <span className="font-Pretendard text-[#C2C2C2]">070-8064-2260 (평일 10:00-18:00)</span>
                 </div>
                 <div className="flex gap-4">
-                  <span className="font-semibold">이메일 문의</span>
-                  <span>deardreambiz@gmail.com</span>
+                  <span className="font-Pretendard text-[#C2C2C2]">이메일 문의</span>
+                  <span className="font-Pretendard text-[#C2C2C2]">deardreambiz@gmail.com</span>
                 </div>
               </div>
               
               <div className="mt-8 pt-8 border-t border-brand-white/20">
                 <div className="flex flex-wrap gap-6 mb-4">
                   <a href="#" className="text-brand-white hover:text-brand-yellow font-pretendard transition-colors">이용 약관</a>
-                  <a href="#" className="text-brand-white hover:text-brand-yellow font-pretendard font-semibold transition-colors">개인정보 처리 방침</a>
-                  <a href="#" className="text-brand-white hover:text-brand-yellow font-pretendard transition-colors">쿠키 정책</a>
-                  <a href="#" className="text-brand-white hover:text-brand-yellow font-pretendard transition-colors">블로그</a>
+                  <a href="#" className="text-brand-white hover:text-brand-yellow font-pretendard transition-colors">•  쿠키정책</a>
+                  <a href="#" className="text-brand-white hover:text-brand-yellow font-pretendard transition-colors">•  블로그</a>
+                  <a href="#" className="text-brand-white hover:text-brand-yellow font-pretendard font-semibold transition-colors"> •  구매품</a>
+                  <a href="#" className="text-brand-white hover:text-brand-yellow font-pretendard font-semibold transition-colors">•   개인정보 처리 방침</a>
                 </div>
-                <p className="text-brand-gray-light text-sm font-pretendard">
+                <p className="text-[#C2C2C2] text-sm font-pretendard">
                   ⓒ 2025, 이어드림
                 </p>
               </div>
             </div>
-            
-            <div className="flex justify-center md:justify-end items-center">
-              <div className="bg-brand-white/5 rounded-lg p-8 max-w-md">
-                <div className="text-center">
-                  <h4 className="text-xl font-semibold font-pretendard mb-4">함께 만들어요</h4>
-                  <p className="text-brand-gray-light font-pretendard mb-6">
-                    가족의 소중한 순간들을 아름다운 책자로 완성해보세요
-                  </p>
-                  <button
-                    onClick={handleStartClick}
-                    className="w-full bg-brand-dark-green hover:bg-brand-dark-green/80 text-brand-white px-6 py-3 rounded-lg font-medium font-pretendard transition-colors focus:outline-none focus:ring-2 focus:ring-brand-white focus:ring-offset-2 focus:ring-offset-brand-dark-green"
-                  >
-                    지금 시작하기
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
-      </footer>
+      </section>
     </div>
   );
 };

@@ -126,7 +126,7 @@ const ProfilePage = () => {
             await updateProfile(profileData);
             
             alert('프로필이 성공적으로 등록되었습니다!');
-            navigate('/family/create-name');
+            navigate('/');
         } catch (error) {
             console.error('프로필 등록 실패:', error);
             alert('프로필 등록 중 오류가 발생했습니다. 입력한 정보를 다시 확인해주세요.');
